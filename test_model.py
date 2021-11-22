@@ -1,27 +1,19 @@
 from datetime import date, timedelta
 import pytest
 
-# from model import...
+from model import OrderLine, Batch
+
 
 today = date.today()
 tomorrow = today = + timedelta(days=1)
 later = tomorrow + timedelta(days=10)
 
 
-def test_allocating_to_a_batch_reduces_the_available_quantity():
-	pytest.fail("todo")
-
-
-def test_can_allocate_if_available_greater_than_required():
-	pytest.fail("todo")
-
-
-def test_cannot_allocate_if_available_smaller_than_required():
-	pytest.fail("todo")
-
-
-def test_can_allocate_if_available_equal_to_required():
-	pytest.fail("todo")
+def make_batch_and_line(sku, batch_qty, line_qty):
+	return (
+		Batch("batch-001", sku, batch_qty, eta=today),
+		OrderLine("order-ref", sku, line_qty)
+		)
 
 
 def test_prefers_warehouse_batches_to_shipments():
