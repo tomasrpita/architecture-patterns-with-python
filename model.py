@@ -3,6 +3,12 @@ from typing import Optional, Set, List
 from datetime import date
 
 
+class OutOfStock(Exception):
+    """
+    Exception raised when a product is out of stock.
+    """
+    pass
+
 @dataclass(frozen=True)
 class OrderLine:
     orderid: str
@@ -68,5 +74,7 @@ def allocate(line: OrderLine, batches: List[Batch]) -> str:
     """
     # None if no batch is available
     batch = next((b for b in batches if b.can_allocate(line)), None)
+    if batch is None:
+        raise OutOfStock(f"Out of stock for sku {line.sku}")
     batch.allocate(line)
     return batch.reference
