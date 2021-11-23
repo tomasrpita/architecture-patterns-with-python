@@ -1,5 +1,5 @@
 This is a note for whwre i stayed in the book
 
 Chapter: 1: Domain Modeling
-Part: Exceptions Can Express Domain Concepts Too
+Part: End of Chapter 1
 
