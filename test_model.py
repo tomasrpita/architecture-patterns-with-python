@@ -20,5 +20,5 @@ def test_prefers_warehouse_batches_to_shipments():
 	pytest.fail("todo")
 
 
-def test_prefers_earlier_batches():
-	pytest.fail("todo")
+# def test_prefers_earlier_batches():
+# 	pytest.fail("todo")

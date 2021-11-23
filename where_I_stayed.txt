@@ -1,5 +1,5 @@
 This is a note for whwre i stayed in the book
 
 Chapter: 1: Domain Modeling
-Part: Dataclasses Are Great for Value Objects
+Part: Exceptions Can Express Domain Concepts Too
 
