@@ -6,6 +6,8 @@
 #
 attrs==21.2.0
     # via pytest
+greenlet==1.1.2
+    # via sqlalchemy
 iniconfig==1.1.1
     # via pytest
 packaging==21.2
@@ -17,6 +19,8 @@ py==1.11.0
 pyparsing==2.4.7
     # via packaging
 pytest==6.2.5
+    # via -r requirements.in
+sqlalchemy==1.4.27
     # via -r requirements.in
 toml==0.10.2
     # via pytest
