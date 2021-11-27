@@ -19,6 +19,8 @@ order_lines = Table(
 
 
 def start_mappers():
+	# When we call the mapper function, SQLAlchemy does its magic to bind
+	# our domain model classes to the various tables we’ve defined.
 	lines_mapper = mapper(model.OrderLine, order_lines)
 	# mapper(model.Batch, order_lines, properties={
 	# 	"allocations": relationship(model.OrderLine, back_populates="batch")
