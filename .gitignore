@@ -129,3 +129,5 @@ dmypy.json
 .pyre/
 
 *.egg-info
+
+.mypy_cache
