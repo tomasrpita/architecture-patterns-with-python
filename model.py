@@ -24,6 +24,9 @@ class Batch:
         self._purchased_quantity = qty
         self._allocations = set() # Set[OrderLine] <= Error, why?
 
+    def __repr__(self):
+        return f"<Batch {self.reference}>"
+
 
     def __eq__(self, other):
         if not isinstance(other, Batch):
@@ -50,7 +53,6 @@ class Batch:
     @property
     def available_quantity(self) -> int:
         return self._purchased_quantity - self.allocated_quantity
-
 
     def allocate(self, line: OrderLine):
         if self.can_allocate(line):
