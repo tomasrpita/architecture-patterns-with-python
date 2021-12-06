@@ -1,5 +1,5 @@
 This is a note for whwre i stayed in the book
 
-Chapter: 2: Repository Pattern
-Part: End of chapter 2
+Chapter: 3: Repository Pattern
+Part: Abstracting State Aids Testability
 
