@@ -1,5 +1,5 @@
 This is a note for whwre i stayed in the book
 
 Chapter: 2: Repository Pattern
-Part: Exercise for theReader
+Part: End of chapter 2
 

@@ -9,9 +9,6 @@ tomorrow = today = + timedelta(days=1)
 later = tomorrow + timedelta(days=10)
 
 
-
-
-
 def make_batch_and_line(sku, batch_qty, line_qty):
 	return (
 		Batch("batch-001", sku, batch_qty, eta=today),
