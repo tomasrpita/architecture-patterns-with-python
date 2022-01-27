@@ -1,5 +1,6 @@
-from tarfile import BLOCKSIZE
-
+import os
+import shutil
+from pathlib import Path
 
 BLOCKSIZE = 65536
 
@@ -15,9 +16,7 @@ def hash_file(path):
     return hasher.hexdigest()
 
 
-import os
-import shutil
-from pathlib import Path
+
 
 def sync(source, dest):
         # Walk the source folder and build a dict of filenames and their hashes
@@ -55,5 +54,3 @@ def sync(source, dest):
 
         
 
-if __name__ == "__main__":
-    sync("C:/Users/tomas/Courses/cosmicpython/architecture-patterns-with-python/folder_test/", "")
