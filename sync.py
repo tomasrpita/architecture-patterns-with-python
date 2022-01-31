@@ -25,6 +25,24 @@ def read_paths_and_hashes(path):
     return hashes
 
 
+# A function that just does business logic
+def determine_actions(source_hashes, dest_hashes, source_folder, dest_folder):
+    for sha, filename in source_hashes.items():
+        if sha not in dest_hashes:
+            sourcepath = Path(source_folder, filename )
+            destpath = Path(dest_folder, filename)
+            yield "copy", sourcepath, destpath
+        elif dest_hashes[sha] != filename:
+            olderpath = Path(dest_folder, dest_hashes[sha])
+            newestpath = Path(dest_folder, filename)
+            yield "move", olderpath, newestpath
+
+    for sha, filename in dest_hashes.items():
+        if sha not in source_hashes:
+            yield "delete", Path(dest_folder, filename)
+        
+
+
 
 def sync(source, dest):
     # Imperative shell step 1, gather inputs
