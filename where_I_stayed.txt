@@ -1,5 +1,9 @@
 This is a note for whwre i stayed in the book
 
-Chapter: 2: Repository Pattern
-Part: End of chapter 2
+Chapter: 4: Our First Use Case: Flask API and Service Layer
+Part: The Straightforward Implementation
+
+To-do:
+    Implementing a database can be as simple as sqllite, 
+    or mysql
 
