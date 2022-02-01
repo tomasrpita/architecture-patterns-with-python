@@ -1,3 +1,9 @@
+import os
 
-def get_postgres_uri():
-    return "a/prostgres/uri"
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+DATABASE_URI = "sqlite:///" + os.path.join(basedir, "app.db")
+
+
+def get_db_uri():
+    return DATABASE_URI
