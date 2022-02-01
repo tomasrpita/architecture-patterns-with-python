@@ -42,8 +42,26 @@ def determine_actions(source_hashes, dest_hashes, source_folder, dest_folder):
             yield "delete", Path(dest_folder, filename)
         
 
+# A function with  Functional Core, Imperative Shell or FCIS.
+# def sync(source, dest):
+#     # imperative shell step 1, gather inputs
+#     source_hashes = read_paths_and_hashes(source)
+#     dest_hashes = read_paths_and_hashes(dest)
+
+#     # step 2: call functional core
+#     actions = determine_actions(source_hashes, dest_hashes, source, dest)
+
+#     # imperative shell step 3, apply outputs
+#     for action, *paths in actions:
+#         if action == "COPY":
+#             shutil.copyfile(*paths)
+#         if action == "MOVE":
+#             shutil.move(*paths)
+#         if action == "DELETE":
+#             os.remove(paths[0])
 
 
+# Testing Edge to Edge with Fakes and Dependency Injection
 def sync(reader, filesystem, source_root, dest_root):
 
     src_hashes = reader(source_root)
