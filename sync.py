@@ -44,23 +44,25 @@ def determine_actions(source_hashes, dest_hashes, source_folder, dest_folder):
 
 
 
-def sync(source, dest):
-    # Imperative shell step 1, gather inputs
-    source_hashes = read_paths_and_hashes(source)
-    dest_hashes = read_paths_and_hashes(dest)
+def sync(reader, filesystem, source_root, dest_root):
 
+    src_hashes = reader(source_root)
+    dest_hashes = reader(dest_root)
 
-    # step 2: call funtional core
-    actions = determine_actions(source_hashes, dest_hashes, source, dest)
+    for sha, filename in src_hashes.items():
+        if sha not in dest_hashes:
+            sourcepath = source_root + "/" + filename
+            destpath = dest_root + "/" + filename
+            filesystem.copy(sourcepath, destpath)
 
-    # imperative shell step #3, apply outputs
-    for action, *paths in actions:
-        if action == "copy":
-            shutil.copyfile(*paths)
-        if action == "move":
-            shutil.move(*paths)
-        if action == "delete":
-            shutil.remmove(paths[0])
+        elif dest_hashes[sha] != filename:
+            olddestpath = dest_root + "/" + dest_hashes[sha]
+            newdestpath = dest_root + "/" + filename
+            filesystem.move(olddestpath, newdestpath)
+
+    for sha, filename in dest_hashes.items():
+        if sha not in src_hashes:
+            filesystem.delete(dest_root + "/" + filename)
     
         
 

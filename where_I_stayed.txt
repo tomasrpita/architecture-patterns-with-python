@@ -2,4 +2,4 @@ This is a note for whwre i stayed in the book
 
 Chapter: 3: Repository Pattern
 Part: Abstracting State Aids Testability
-Implementing Our Chosen Abstractions - read_paths_and_hashes()
+Testing Edge to Edge with Fakes and Dependency Injection - 

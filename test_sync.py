@@ -1,60 +1,35 @@
-import shutil
-import tempfile
-from pathlib import Path
-from sync import sync, determine_actions
+from sync import sync
 
 
-def test_when_a_file_exists_in_source_but_not_the_destination_sync():
-    try:
-        source = tempfile.mkdtemp()
-        dest = tempfile.mkdtemp()
-        
-        content = "I am a very useful file"
-        (Path(source, "my-file")).write_text(content)
+class FakeFileSystem(list):
 
-        sync(source, dest)
+    def copy(self, src, dest):
+        self.append(('COPY', src, dest))
 
-        expected_path = Path(dest, "my-file")
-        assert expected_path.exists()
-        assert expected_path.read_text() == content
+    def move(self, src, dest):
+        self.append(('MOVE', src, dest))
 
-    finally:
-        shutil.rmtree(source)
-        shutil.rmtree(dest)
-
-def test_when_a_file_has_been_renamed_in_the_source_sync():
-    try:
-        source = tempfile.mkdtemp()
-        dest = tempfile.mkdtemp()
-
-        content = "I am a file that was renamed"
-        source_path = Path(source, "source-file")
-        old_dest_path = Path(dest, "dest-file")
-        espected_desd_path = Path(dest, "source-file")
-
-        source_path.write_text(content)
-        old_dest_path.write_text(content)
-
-        sync(source, dest)
-
-        assert old_dest_path.exists() == False
-        assert espected_desd_path.exists()
-        assert espected_desd_path.read_text() == content
-        
-    finally:
-        shutil.rmtree(source)
-        shutil.rmtree(dest)
+    def delete(self, dest):
+        self.append(('DELETE', dest))
 
 
 def test_when_a_file_exists_in_the_source_but_not_the_destination():
-    src_hashes = {"hash1": "fn1"}
-    dst_hashes = {}
-    actions = determine_actions(src_hashes, dst_hashes, Path("/src"), Path("/dst"))
-    assert list(actions) == [("copy", Path("/src/fn1"), Path("/dst/fn1"))]
+    source = {"sha1": "my-file" }
+    dest = {}
+    filesystem = FakeFileSystem()
+
+    reader = {"/source": source, "/dest": dest}
+    sync(reader.pop, filesystem, "/source", "/dest")
+
+    assert filesystem == [("COPY", "/source/my-file", "/dest/my-file")]
 
 
 def test_when_a_file_has_been_renamed_in_the_source():
-    src_hashes = {"hash1": "fn1"}
-    dst_hashes = {"hash1": "fn2"}
-    actions = determine_actions(src_hashes, dst_hashes, Path("/src"), Path("/dst"))
-    assert list(actions) == [("move", Path("/dst/fn2"), Path("/dst/fn1"))]
+    source = {"sha1": "renamed-file" }
+    dest = {"sha1": "original-file" }
+    filesystem = FakeFileSystem()
+
+    reader = {"/source": source, "/dest": dest}
+    sync(reader.pop, filesystem, "/source", "/dest")
+
+    assert filesystem == [("MOVE", "/dest/original-file", "/dest/renamed-file")]
