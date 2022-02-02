@@ -8,6 +8,10 @@ atomicwrites==1.4.0
     # via pytest
 attrs==21.2.0
     # via pytest
+certifi==2021.10.8
+    # via requests
+charset-normalizer==2.0.11
+    # via requests
 click==8.0.3
     # via flask
 colorama==0.4.4
@@ -18,6 +22,8 @@ flask==2.0.2
     # via -r requirements.in
 greenlet==1.1.2
     # via sqlalchemy
+idna==3.3
+    # via requests
 iniconfig==1.1.1
     # via pytest
 itsdangerous==2.0.1
@@ -36,9 +42,13 @@ pyparsing==2.4.7
     # via packaging
 pytest==6.2.5
     # via -r requirements.in
+requests==2.27.1
+    # via -r requirements.in
 sqlalchemy==1.4.27
     # via -r requirements.in
 toml==0.10.2
     # via pytest
+urllib3==1.26.8
+    # via requests
 werkzeug==2.0.2
     # via flask

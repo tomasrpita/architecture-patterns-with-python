@@ -1,4 +1,7 @@
+# Tests
 pytest
+requests
+
 
 SQLAlchemy
 Flask

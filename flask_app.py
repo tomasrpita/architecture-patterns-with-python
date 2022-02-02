@@ -27,3 +27,4 @@ def allocate_endpoint():
     batchref = model.allocate(line, batches)
 
     return {"batchref": batchref}, 201
+

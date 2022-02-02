@@ -4,6 +4,5 @@ Chapter: 4: Our First Use Case: Flask API and Service Layer
 Part: The Straightforward Implementation
 
 To-do:
-    Implementing a database can be as simple as sqllite, 
-    or mysql
+    Implementing a database in postgres local or dy docker
 
