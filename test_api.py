@@ -69,3 +69,31 @@ def test_allocations_are_persisted(add_stock):
     r = requests.post(f"{url}/allocate", json=line2)
     assert r.status_code == 201
     assert r.json()["batchref"] == batch2
+
+
+
+@pytest.mark.usefixtures("restart_api")
+def test_400_message_for_out_stock(add_stock):
+    sku = random_sku()
+    small_batch = random_batchref()
+    large_order = random_orderid()
+    add_stock([(small_batch, sku, 10, "2011-01-01")])
+    line = {"order_id": large_order, "sku": sku, "qty": 11}
+
+    url = config.get_api_url()
+    r = requests.post(f"{url}/allocate", json=line)
+
+    assert r.status_code == 400
+    assert r.json()["message"] == "Out of stock"
+
+@pytest.mark.usefixtures("restart_api")
+def test_400_message_for_invalid_sku(add_stock):
+    unknow_sku = random_sku()
+    order = random_orderid()
+    line = {"order_id": order, "sku": unknow_sku, "qty": 11}
+
+    url = config.get_api_url()
+    r = requests.post(f"{url}/allocate", json=line)
+
+    assert r.status_code == 400
+    assert r.json()["message"] == "Invalid sku"

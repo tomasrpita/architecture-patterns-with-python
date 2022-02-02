@@ -1,7 +1,7 @@
 This is a note for whwre i stayed in the book
 
 Chapter: 4: Our First Use Case: Flask API and Service Layer
-Part: The Straightforward Implementation
+Part: Error Conditions That Require Database Checks
 
 To-do:
     Implementing a database in postgres local or dy docker
