@@ -2,6 +2,6 @@
 pytest
 requests
 
-
+psycopg2
 SQLAlchemy
 Flask
