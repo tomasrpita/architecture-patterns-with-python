@@ -36,5 +36,6 @@ def allocate_endpoint():
     except model.OutOfStock as e:
         return {"message": str(e)}, 400
 
+    session.commit()
     return {"batchref": batchref}, 201
 

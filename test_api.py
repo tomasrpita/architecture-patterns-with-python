@@ -71,7 +71,6 @@ def test_allocations_are_persisted(add_stock):
     assert r.json()["batchref"] == batch2
 
 
-
 @pytest.mark.usefixtures("restart_api")
 def test_400_message_for_out_stock(add_stock):
     sku = random_sku()
@@ -86,8 +85,9 @@ def test_400_message_for_out_stock(add_stock):
     assert r.status_code == 400
     assert r.json()["message"] == "Out of stock"
 
+
 @pytest.mark.usefixtures("restart_api")
-def test_400_message_for_invalid_sku(add_stock):
+def test_400_message_for_invalid_sku():
     unknow_sku = random_sku()
     order = random_orderid()
     line = {"order_id": order, "sku": unknow_sku, "qty": 11}
