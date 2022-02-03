@@ -50,4 +50,3 @@ def test_commit():
 
     services.allocate(line, repo, session)
     assert session.commited is True
-    
