@@ -1,6 +1,8 @@
 import pytest
 import repository
 import model
+import services 
+
 
 class FakeSession:
     commited = False
@@ -30,7 +32,7 @@ def test_returns_allocation():
     repo = FakeRepository([batch])
 
     result = services.allocate(line, repo, FakeSession())
-    assert result = "batch-1"
+    assert result == "batch-1"
 
 
 def test_error_for_invalid_sku():

@@ -1,8 +1,8 @@
 This is a note for whwre i stayed in the book
 
 Chapter: 4: Our First Use Case: Flask API and Service Layer
-Part: Introducing a Service Layer, and Using FakeRepository to Unit Test It
+Part: A Typical Service Function
 
 To-do:
-    Implementing a database in postgres local or dy docker
+    Implementing a database in postgres local or by docker
 

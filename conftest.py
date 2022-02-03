@@ -97,6 +97,7 @@ def add_stock(postgres_session):
         )
         postgres_session.commit()
 
+
 @pytest.fixture
 def restart_api():
     # (Path(__file__).parent, "..", "flask_app.py").joinpath().touch()
