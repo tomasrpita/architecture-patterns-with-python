@@ -31,8 +31,8 @@ def allocate_endpoint():
         return {"message": f"Invalid sku {line.sku}"}, 400
 
     try:
-
         batchref = model.allocate(line, batches)
+    
     except model.OutOfStock as e:
         return {"message": str(e)}, 400
 
