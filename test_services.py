@@ -40,7 +40,7 @@ def test_error_for_invalid_sku():
     batch = model.Batch("batch-1", "sku-2", 10, "2011-01-01")
     repo = FakeRepository([batch])
 
-    with pytest.raises(services.invalidSku, match="Invalid sku NONEXITENTSKU"):
+    with pytest.raises(services.InvalidSku, match="Invalid sku sku-1"):
         services.allocate(line, repo, FakeSession())
 
 

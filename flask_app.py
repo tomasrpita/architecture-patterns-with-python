@@ -10,9 +10,12 @@ import services
 
 
 orm.start_mappers()
-get_session = sessionmaker(bind=create_engine(config.get_postgres_uri))
+get_session = sessionmaker(bind=create_engine(config.get_postgres_uri()))
 app = Flask(__name__)
 
+session = get_session()
+rows = session.execute("select * from batches")
+print(list(rows))
 
 @app.route("/allocate", methods=["POST"])
 def allocate_endpoint():

@@ -1,3 +1,12 @@
+"""
+Its job is to handle requests from the outside world and to orchestrate an 
+operation. What we mean is that the service layer drives the application by
+following a bunch of simple steps:
+    * Get some data from the database
+    * Update the domain model
+    * Persist any changes
+"""
+
 from flask import session
 import model
 import repository

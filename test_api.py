@@ -30,9 +30,9 @@ def test_happy_path_returns_201_and_allocated_batch(add_stock):
     otherbatch = random_batchref(3)
     add_stock(
         [
-            (laterbatch, sku, 100, "2011-01-02")
-            (earlybatch, sku, 100, "2011-01-01")
-            (otherbatch, othersku, 100, None)
+            (laterbatch, sku, 100, "2011-01-02"),
+            (earlybatch, sku, 100, "2011-01-01"),
+            (otherbatch, othersku, 100, None),
         ]
     )
     data = {"order_id": random_orderid(), "sku": sku, "qty": 3}
@@ -48,7 +48,7 @@ def test_happy_path_returns_201_and_allocated_batch(add_stock):
 def test_unhappy_path_returns_400_and_error_message():
     unknown_sku = random_sku()
     order = random_orderid()
-    line = {"order_id": order, "sku": unknown_sku, "qty": 11}
+    line = {"orderid": order, "sku": unknown_sku, "qty": 11}
 
     url = config.get_api_url()
     r = requests.post(f"{url}/allocate", json=line)
