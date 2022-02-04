@@ -1,8 +1,9 @@
 This is a note for whwre i stayed in the book
 
 Chapter: 4: Our First Use Case: Flask API and Service Layer
-Part: A Typical Service Function
+Part: Wrap-Up
 
 To-do:
-    Implementing a database in postgres local or by docker
+    Fix: test - test_happy_path_returns_201_and_allocated_batch, Fails bty
+    problem on conftest funtion: add_stock
 

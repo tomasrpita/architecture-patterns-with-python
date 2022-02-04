@@ -8,8 +8,8 @@ following a bunch of simple steps:
 """
 
 from flask import session
-import model
-import repository
+import domain.model as model
+import adapters.repository as repository
 
 
 class InvalidSku(Exception):
