@@ -20,7 +20,7 @@ def random_batchref(name=""):
 def random_orderid(name=""):
     return f"order-{name}-{random_suffix()}"
 
-# Finally, we can confidently strip down our E2E tests to just two, 
+# Finally, we can confidently strip down our E2E tests to just two,
 # one for the happy path and one for the unhappy path:
 @pytest.mark.usefixtures("restart_api")
 def test_happy_path_returns_201_and_allocated_batch(add_stock):
@@ -30,7 +30,7 @@ def test_happy_path_returns_201_and_allocated_batch(add_stock):
     otherbatch = random_batchref(3)
     add_stock(
         [
-            # (laterbatch, sku, 100, "2011-01-02"),
+            (laterbatch, sku, 100, "2011-02-02"),
             (earlybatch, sku, 100, "2011-01-01"),
             (otherbatch, othersku, 100, None),
         ]

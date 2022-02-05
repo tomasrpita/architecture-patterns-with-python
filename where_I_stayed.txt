@@ -4,6 +4,7 @@ Chapter: 4: Our First Use Case: Flask API and Service Layer
 Part: Wrap-Up
 
 To-do:
-    Fix: test - test_happy_path_returns_201_and_allocated_batch, Fails bty
-    problem on conftest funtion: add_stock
+	The test_apy, erroneously loads the early batch, when it should
+	load the laterbatch, and this is a case of domain that is already
+	proven in their respective tests, why here it does not work well?
 

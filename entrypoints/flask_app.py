@@ -14,8 +14,7 @@ get_session = sessionmaker(bind=create_engine(config.get_postgres_uri()))
 app = Flask(__name__)
 
 session = get_session()
-rows = session.execute("select * from batches")
-print(list(rows))
+
 
 @app.route("/allocate", methods=["POST"])
 def allocate_endpoint():
@@ -23,8 +22,8 @@ def allocate_endpoint():
     repo = repository.SqlAlchemyRepository(session)
     line = model.OrderLine(
         request.json["orderid"],
-        request.json["sku"], 
-        request.json["qty"], 
+        request.json["sku"],
+        request.json["qty"],
     )
 
     try:
