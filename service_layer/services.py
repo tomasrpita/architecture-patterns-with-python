@@ -7,7 +7,6 @@ following a bunch of simple steps:
     * Persist any changes
 """
 
-from flask import session
 import domain.model as model
 import adapters.repository as repository
 
@@ -23,7 +22,7 @@ def is_valid_sku(sku, batches):
 def allocate(
         line: model.OrderLine, 
         repo: repository.AbstractRepository, 
-        session: session
+        session
     ) -> str:
     batches = repo.list()
     if not is_valid_sku(line.sku, batches):
