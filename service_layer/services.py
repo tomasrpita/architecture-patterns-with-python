@@ -20,15 +20,25 @@ def is_valid_sku(sku, batches):
 
 
 def allocate(
-        line: model.OrderLine, 
+        orderid: str, sku: str, qty: int,
         repo: repository.AbstractRepository, 
         session
     ) -> str:
+    line = model.OrderLine( orderid, sku, qty)
     batches = repo.list()
-    if not is_valid_sku(line.sku, batches):
-        raise InvalidSku(f"Invalid sku {line.sku}")
+    if not is_valid_sku(sku, batches):
+        raise InvalidSku(f"Invalid sku {sku}")
     batchref = model.allocate(line, batches)
     # this  step is a little unsatisfactory at the moment, 
     # as our service layer is tightly coupled to our database layer
     session.commit()
     return batchref
+
+
+def add_batch(
+        batchref: str, sku: str, qty: int, eta: str,
+        repo: repository.AbstractRepository, 
+        session
+    ) -> None:
+    repo.add(model.Batch(batchref, sku, qty, eta))
+    session.commit()

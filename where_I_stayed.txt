@@ -1,6 +1,6 @@
 This is a note for whwre i stayed in the book
 
-Chapter: 4: Our First Use Case: Flask API and Service Layer
+Chapter 5: TDD in High Gear and Low Gear
 Part: Wrap-Up
 
 To-do:
@@ -8,3 +8,5 @@ To-do:
 	load the laterbatch, and this is a case of domain that is already
 	proven in their respective tests, why here it does not work well?
 
+    Run: grep -c test_ **/test_*.py
+    on Mac
