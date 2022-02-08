@@ -1,7 +1,7 @@
 This is a note for whwre i stayed in the book
 
 Chapter 5: TDD in High Gear and Low Gear
-Part: Wrap-Up
+Part: Adding a Missing Service
 
 To-do:
 	The test_apy, erroneously loads the early batch, when it should
