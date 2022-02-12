@@ -1,7 +1,7 @@
 import pytest
 import adapters.repository as repository
 import domain.model as model
-import service_layer.services as services 
+import service_layer.services as services
 
 
 class FakeSession:
@@ -59,14 +59,13 @@ def test_deallocate_decrements_available_quantity():
     services.allocate("o1", "BLUE-PLINTH", 10, repo, session)
     batch = repo.get(reference="b1")
     assert batch.available_quantity == 90
-    # services.deallocate(...
-    ...
+    services.deallocate("b1", "o1", repo, session)
     assert batch.available_quantity == 100
 
 
-def test_deallocate_decrements_correct_quantity():
-    ...  #  TODO
+# def test_deallocate_decrements_correct_quantity():
+#     ...  #  TODO
 
 
-def test_trying_to_deallocate_unallocated_batch():
-    ...  #  TODO: should this error or pass silently? up to you.
+# def test_trying_to_deallocate_unallocated_batch():
+#     ...  #  TODO: should this error or pass silently? up to you.

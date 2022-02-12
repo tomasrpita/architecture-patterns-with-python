@@ -78,3 +78,10 @@ def allocate(line: OrderLine, batches: List[Batch]) -> str:
         raise OutOfStock(f"Out of stock for sku {line.sku}")
     batch.allocate(line)
     return batch.reference
+
+
+def deallocate(batch: Batch, line: OrderLine):
+    """
+    Deallocates a line from a batch.
+    """
+    batch.deallocate(line)
