@@ -24,7 +24,7 @@ def allocate(
         repo: repository.AbstractRepository, 
         session
     ) -> str:
-    line = model.OrderLine( orderid, sku, qty)
+    line = model.OrderLine(orderid, sku, qty)
     batches = repo.list()
     if not is_valid_sku(sku, batches):
         raise InvalidSku(f"Invalid sku {sku}")

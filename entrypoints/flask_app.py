@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import Flask, request
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -34,3 +35,24 @@ def allocate_endpoint():
         return {"message": str(e)}, 400
 
     return {"batchref": batchref}, 201
+
+
+@app.route("/add_batch", methods=["POST"])
+def add_batch_endpoint():
+
+    session = get_session()
+    repo = repository.SqlAlchemyRepository(session)
+    eta = request.json["eta"]
+    if eta is not None:
+        eta = datetime.fromisoformat(eta).date()
+
+    services.add_batch(
+        request.json["batchref"],
+        request.json["sku"],
+        request.json["qty"],
+        eta,
+        repo, 
+        session
+    )
+   
+    return {"message": "ok"}, 201
