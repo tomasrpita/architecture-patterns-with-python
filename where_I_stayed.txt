@@ -5,14 +5,17 @@ Part: Exercise for the Reader
 
 To-do:
 
-	The test_apy, test_happy_path_returns_201_and_allocated_batch, 
-    erroneously loads the early batch, when it should lo proven in their 
+	The test_apy, test_happy_path_returns_201_and_allocated_batch,
+    erroneously loads the early batch, when it should lo proven in their
     respective tests, why here it does not work well?
 
-    Now that we have an allocate service, why not build out a service for deallocate? 
-    We’ve added an E2E test and a few stub service-layer tests for you to get started 
+    Now that we have an allocate service, why not build out a service for deallocate?
+    We’ve added an E2E test and a few stub service-layer tests for you to get started
     on GitHub.
 
-    If that’s not enough, continue into the E2E tests and flask_app.py, and 
-    refactor the Flask adapter to be more RESTful. Notice how doing so doesn’t 
+    If that’s not enough, continue into the E2E tests and flask_app.py, and
+    refactor the Flask adapter to be more RESTful. Notice how doing so doesn’t
     require any change to our service layer or domain layer!
+
+    Set Intructios for run flask and postgres in local while running the tests
+    and docker is not available in the local machine.
