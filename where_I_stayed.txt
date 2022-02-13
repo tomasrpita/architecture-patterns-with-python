@@ -1,12 +1,11 @@
 This is a note for whwre i stayed in the book
 
-Chapter 5: TDD in High Gear and Low Gear
-Part: Finished
+Chapter 6: Unit of Work Pattern
+Part: Unit of Work and Its Context Manager
 
 To-do:
 	The test_apy, erroneously loads the early batch, when it should
 	load the laterbatch, and this is a case of domain that is already
 	proven in their respective tests, why here it does not work well?
 
-    Run: grep -c test_ **/test_*.py
-    on Mac
+	the unit of work (or UoW, which we pronounce "you-wow")
