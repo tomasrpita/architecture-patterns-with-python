@@ -37,7 +37,7 @@ def allocate_endpoint():
     return {"batchref": batchref}, 201
 
 
-@app.route("/add_batch", methods=["POST"])
+@app.route("/batches", methods=["POST"])
 def add_batch_endpoint():
 
     session = get_session()
