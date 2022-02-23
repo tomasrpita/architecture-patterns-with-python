@@ -9,7 +9,7 @@ from sqlalchemy.orm import sessionmaker, clear_mappers
 from sqlalchemy.exc import OperationalError
 
 
-import config
+import src.allocation.config as config
 from adapters.orm import metadata, start_mappers
 
 
@@ -46,7 +46,7 @@ def wait_for_webapp_to_come_up():
         except ConnectionError:
             time.sleep(0.5)
     pytest.fail("API never came up")
- 
+
 
 @pytest.fixture(scope="session")
 def postgres_db():
@@ -65,7 +65,7 @@ def postgres_session(postgres_db):
 
 @pytest.fixture
 def restart_api():
-    # What does this line do?  
+    # What does this line do?
     # If I comment it out it still works the same
     (Path(__file__).parent / "../entrypoints/flask_app.py").touch()
     time.sleep(0.5)

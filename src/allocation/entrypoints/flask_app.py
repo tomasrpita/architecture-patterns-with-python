@@ -3,7 +3,7 @@ from flask import Flask, request
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-import config
+import src.allocation.config as config
 import domain.model as model
 import adapters.orm as orm
 import adapters.repository as repository
@@ -27,10 +27,10 @@ def allocate_endpoint():
             request.json["orderid"],
             request.json["sku"],
             request.json["qty"],
-            repo, 
+            repo,
             session
         )
-    
+
     except (model.OutOfStock, services.InvalidSku) as e:
         return {"message": str(e)}, 400
 
@@ -51,8 +51,8 @@ def add_batch_endpoint():
         request.json["sku"],
         request.json["qty"],
         eta,
-        repo, 
+        repo,
         session
     )
-   
+
     return {"message": "ok"}, 201
