@@ -3,6 +3,8 @@ This is a note for whwre i stayed in the book
 Chapter 6: Unit of Work Pattern
 Part: End of Chapter
 
+Define "FLASK_APP": "src/allocation/entrypoints/flask_app.py" to test
+
 To-do:
 	The test_apy, erroneously loads the early batch, when it should
 	load the laterbatch, and this is a case of domain that is already
@@ -10,8 +12,7 @@ To-do:
 
 	the unit of work (or UoW, which we pronounce "you-wow")
 
-	test it
 	I should to make the reader exercise, and make it more interesting
-	Resolve imports
+
 
 
