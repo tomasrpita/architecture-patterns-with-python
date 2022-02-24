@@ -1,6 +1,6 @@
 # pylint: disable=protected-access
-import domain.model as model
-import adapters.repository as repository
+import src.allocation.domain.model as model
+import src.allocation.adapters.repository as repository
 
 
 

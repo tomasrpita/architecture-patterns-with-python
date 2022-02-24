@@ -1,7 +1,7 @@
 This is a note for whwre i stayed in the book
 
 Chapter 6: Unit of Work Pattern
-Part: Don’t Mock What You Don’t Own
+Part: End of Chapter
 
 To-do:
 	The test_apy, erroneously loads the early batch, when it should
@@ -9,3 +9,8 @@ To-do:
 	proven in their respective tests, why here it does not work well?
 
 	the unit of work (or UoW, which we pronounce "you-wow")
+
+	test it
+	I should to make the reader exercise, and make it more interesting
+
+

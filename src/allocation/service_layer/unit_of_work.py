@@ -8,13 +8,15 @@ import config
 class AbstractUnitOfWork(abc.ABC):
     batches: repository.AbstractRepository
 
+    def __enter__(self):
+        return self
+
     def __exit__(self, *args):
         self.rollback()
 
     @abc.abstractmethod
     def commit(self):
         raise NotImplementedError
-
 
     @abc.abstractmethod
     def rollback(self):
@@ -35,14 +37,12 @@ class SqlAlchemnyUnitOfWork(AbstractUnitOfWork):
         self.committed = False
 
     def commit(self):
-        self.committed = True
         self.session.commit()
+        self.committed = True
 
     def rollback(self):
         if self.committed:
             self.session.rollback()
-        # else:
-            self.session.close()
 
     def __enter__(self):
         self.session = self.session_factory()

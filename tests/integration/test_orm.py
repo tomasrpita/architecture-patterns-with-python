@@ -1,4 +1,4 @@
-import domain.model as model
+import src.allocation.domain.model as model
 from datetime import date
 
 

@@ -1,5 +1,5 @@
 from datetime import date, timedelta
-from domain.model import OrderLine, Batch
+from src.allocation.domain.model import OrderLine, Batch
 
 
 today = date.today()
