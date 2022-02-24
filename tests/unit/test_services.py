@@ -28,7 +28,7 @@ class FakeUnitOfWork(unit_of_work.AbstractUnitOfWork):
         self.committed = False
 
     def commit(self):
-        self.commited = True
+        self.committed = True
 
     def rollback(self):
         pass
@@ -60,4 +60,4 @@ def test_allocate_commits():
     uow = FakeUnitOfWork()
     services.add_batch("batch-1", "sku-1", 100, "2011-01-01", uow)
     services.allocate("order-1", "sku-1", 10, uow)
-    assert uow.commited is True
+    assert uow.committed is True

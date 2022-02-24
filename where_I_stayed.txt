@@ -12,5 +12,6 @@ To-do:
 
 	test it
 	I should to make the reader exercise, and make it more interesting
+	Resolve imports
 
 

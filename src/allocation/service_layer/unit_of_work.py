@@ -2,8 +2,8 @@ import abc
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-import adapters.repository as repository
-import config
+import src.allocation.adapters.repository as repository
+import src.allocation.config as config
 
 class AbstractUnitOfWork(abc.ABC):
     batches: repository.AbstractRepository
@@ -29,8 +29,7 @@ DEFAULT_SESSION_FACTORY = sessionmaker(
     )
 )
 
-
-class SqlAlchemnyUnitOfWork(AbstractUnitOfWork):
+class SqlAlchemyUnitOfWork(AbstractUnitOfWork):
     def __init__(self, session_factory=DEFAULT_SESSION_FACTORY):
         self.session_factory = session_factory
         self.session = None

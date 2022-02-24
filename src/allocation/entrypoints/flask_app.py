@@ -1,13 +1,19 @@
 from datetime import datetime
 from flask import Flask, request
 
-import src.allocation.config as config
-import domain.model as model
-import adapters.orm as orm
-import adapters.repository as repository
-import service_layer.services as services
-import service_layer.unit_of_work as unit_of_work
+# import src.allocation.domain.model as model
+# import src.allocation.adapters.orm as orm
+# import src.allocation.service_layer.services as services
+# import src.allocation.service_layer.unit_of_work as unit_of_work
+# import ..domain.model as model
+# import adapters.orm as orm
+# import service_layer.services as services
+# import service_layer.unit_of_work as unit_of_work
 
+from ..domain import model
+from ..adapters import orm
+from ..service_layer import services
+from ..service_layer import unit_of_work
 
 orm.start_mappers()
 app = Flask(__name__)

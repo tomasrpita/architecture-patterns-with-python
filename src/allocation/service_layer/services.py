@@ -10,8 +10,8 @@ following a bunch of simple steps:
 from datetime import date
 from typing import Optional
 
-import domain.model as model
-import unit_of_work
+import src.allocation.domain.model as model
+import src.allocation.service_layer.unit_of_work as unit_of_work
 
 
 class InvalidSku(Exception):
