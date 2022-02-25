@@ -5,8 +5,8 @@ from flask import Flask, request
 import src.allocation.domain.model as model
 import src.allocation.adapters.orm as orm
 import src.allocation.service_layer.services as services
-import src.allocation.service_layer.unit_of_work as unit_of_work
-
+# import src.allocation.service_layer.unit_of_work as unit_of_work
+from src.allocation.service_layer.unit_of_work import uow_maker
 
 orm.start_mappers()
 app = Flask(__name__)
@@ -19,7 +19,7 @@ def allocate_endpoint():
             request.json["orderid"],
             request.json["sku"],
             request.json["qty"],
-            unit_of_work.SqlAlchemyUnitOfWork()
+            uow_maker
         )
 
     except (model.OutOfStock, services.InvalidSku) as e:
@@ -40,7 +40,7 @@ def add_batch_endpoint():
         request.json["sku"],
         request.json["qty"],
         eta,
-        unit_of_work.SqlAlchemyUnitOfWork()
+        uow_maker
     )
 
     return {"message": "ok"}, 201

@@ -8,11 +8,11 @@ import src.allocation.config as config
 class AbstractUnitOfWork(abc.ABC):
     batches: repository.AbstractRepository
 
-    def __enter__(self):
-        return self
+    # def __enter__(self):
+    #     return self
 
-    def __exit__(self, *args):
-        self.rollback()
+    # def __exit__(self, *args):
+    #     self.rollback()
 
     @abc.abstractmethod
     def commit(self):
@@ -43,11 +43,21 @@ class SqlAlchemyUnitOfWork(AbstractUnitOfWork):
         if self.committed:
             self.session.rollback()
 
-    def __enter__(self):
-        self.session = self.session_factory()
-        self.batches = repository.SqlAlchemyRepository(self.session)
-        return super().__enter__()
+    # def __enter__(self):
+    #     self.session = self.session_factory()
+    #     self.batches = repository.SqlAlchemyRepository(self.session)
+    #     return super().__enter__()
 
-    def __exit__(self, *args):
-        super().__exit__(*args)
-        self.session.close()
+    # def __exit__(self, *args):
+    #     super().__exit__(*args)
+    #     self.session.close()
+
+from contextlib import contextmanager
+
+@contextmanager
+def uow_maker(session_factory=DEFAULT_SESSION_FACTORY):
+    uow = SqlAlchemyUnitOfWork(session_factory)
+    uow.batches = repository.SqlAlchemyRepository(uow.session)
+    yield uow
+    uow.rollback()
+    uow.session.close()

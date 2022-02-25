@@ -8,10 +8,12 @@ following a bunch of simple steps:
 """
 
 from datetime import date
-from typing import Optional
+from typing import ContextManager, Optional
 
 import src.allocation.domain.model as model
-import src.allocation.service_layer.unit_of_work as unit_of_work
+# import src.allocation.service_layer.unit_of_work as unit_of_work
+from src.allocation.service_layer.unit_of_work import AbstractUnitOfWork, uow_maker
+
 
 
 class InvalidSku(Exception):
@@ -24,10 +26,10 @@ def is_valid_sku(sku, batches):
 
 def allocate(
         orderid: str, sku: str, qty: int,
-        uow: unit_of_work.AbstractUnitOfWork,
+        uow #: ContextManager[AbstractUnitOfWork],
     ) -> str:
     line = model.OrderLine(orderid, sku, qty)
-    with uow:
+    with uow() as uow:
         batches = uow.batches.list()
         if not is_valid_sku(sku, batches):
             raise InvalidSku(f"Invalid sku {sku}")
@@ -38,8 +40,8 @@ def allocate(
 
 def add_batch(
         batchref: str, sku: str, qty: int, eta: Optional[date],
-        uow: unit_of_work.AbstractUnitOfWork,
+        uow #: ContextManager[AbstractUnitOfWork],
     ) -> None:
-    with uow:
+    with uow() as uow:
         uow.batches.add(model.Batch(batchref, sku, qty, eta))
         uow.commit()

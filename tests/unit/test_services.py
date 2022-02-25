@@ -1,3 +1,4 @@
+from contextlib import contextmanager
 import pytest
 import src.allocation.adapters.repository as repository
 import src.allocation.domain.model as model
@@ -33,23 +34,29 @@ class FakeUnitOfWork(unit_of_work.AbstractUnitOfWork):
     def rollback(self):
         pass
 
+@contextmanager
+def fake_uow_maker():
+    uow = FakeUnitOfWork()
+    yield uow
+    uow.rollback()
+
 
 def test_add_batch():
-    uow = FakeUnitOfWork()
+    uow = fake_uow_maker
     services.add_batch("b1", "CRUNCHY-ARMCHAIR", 100, None, uow)
     assert uow.batches.get("b1") is not None
     assert uow.committed
 
 
 def test_allocate_returns_allocation():
-    uow = FakeUnitOfWork()
+    uow = fake_uow_maker
     services.add_batch("batch1", "COMPLICATED-LAMP", 100, None, uow)
     result = services.allocate("o1", "COMPLICATED-LAMP", 10, uow)
     assert result == "batch1"
 
 
 def test_allocate_error_for_invalid_sku():
-    uow = FakeUnitOfWork()
+    uow = fake_uow_maker
     services.add_batch("batch-1", "sku-2", 100, "2011-01-01", uow)
 
     with pytest.raises(services.InvalidSku, match="Invalid sku sku-1"):
@@ -57,7 +64,7 @@ def test_allocate_error_for_invalid_sku():
 
 
 def test_allocate_commits():
-    uow = FakeUnitOfWork()
+    uow = fake_uow_maker
     services.add_batch("batch-1", "sku-1", 100, "2011-01-01", uow)
     services.allocate("order-1", "sku-1", 10, uow)
     assert uow.committed is True
