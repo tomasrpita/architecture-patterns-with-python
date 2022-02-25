@@ -11,7 +11,9 @@ To-do:
 	proven in their respective tests, why here it does not work well?
 
 
-	Don.t convice me....
+	
+	With an approach to using @contextmanager, but all the tests don't work for 
+	me at all, maybe I'll get back to it later...
 
 
 

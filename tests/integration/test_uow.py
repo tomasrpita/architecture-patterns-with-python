@@ -1,5 +1,6 @@
 import src.allocation.domain.model as model
-import src.allocation.service_layer.unit_of_work as unit_of_work
+# import src.allocation.service_layer.unit_of_work as unit_of_work
+from src.allocation.service_layer.unit_of_work import uow_maker
 import pytest
 
 def insert_batch(session, ref, sku, qty, eta):
@@ -29,8 +30,8 @@ def test_uow_can_retrieve_a_batch_and_allocate_to_it(session_factory):
     insert_batch(session, "batch1", "LITTLE-PRETTY-CHARIS", 100, None)
     session.commit()
 
-    uow = unit_of_work.SqlAlchemyUnitOfWork(session_factory)
-    with uow:
+    # uow = unit_of_work.SqlAlchemyUnitOfWork(session_factory)
+    with uow_maker() as uow:
         batch = uow.batches.get(reference="batch1")
         line = model.OrderLine("o1", "LITTLE-PRETTY-CHARIS", 10)
         batch.allocate(line)
@@ -41,8 +42,8 @@ def test_uow_can_retrieve_a_batch_and_allocate_to_it(session_factory):
 
 
 def test_rolls_back_uncommitted_work_by_default(session_factory):
-    uow = unit_of_work.SqlAlchemyUnitOfWork(session_factory)
-    with uow:
+    # uow = unit_of_work.SqlAlchemyUnitOfWork(session_factory)
+    with uow_maker() as uow:
         insert_batch(uow.session, "batch1", "MEDIUM-PLINTH", 100, None)
 
     new_session = session_factory()
@@ -54,9 +55,9 @@ def test_rolls_back_on_error(session_factory):
     class MyException(Exception):
         pass
 
-    uow = unit_of_work.SqlAlchemyUnitOfWork(session_factory)
+    # uow = unit_of_work.SqlAlchemyUnitOfWork(session_factory)
     with pytest.raises(MyException):
-        with uow:
+        with uow_maker() as uow:
             insert_batch(uow.session, "batch1", "LARGE-FORK", 100, None)
             raise MyException()
 

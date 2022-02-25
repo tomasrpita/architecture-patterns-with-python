@@ -12,7 +12,7 @@ from typing import ContextManager, Optional
 
 import src.allocation.domain.model as model
 # import src.allocation.service_layer.unit_of_work as unit_of_work
-from src.allocation.service_layer.unit_of_work import AbstractUnitOfWork, uow_maker
+# from src.allocation.service_layer.unit_of_work import AbstractUnitOfWork, uow_maker
 
 
 
@@ -26,10 +26,10 @@ def is_valid_sku(sku, batches):
 
 def allocate(
         orderid: str, sku: str, qty: int,
-        uow #: ContextManager[AbstractUnitOfWork],
+        uow_maker #: ContextManager[AbstractUnitOfWork],
     ) -> str:
     line = model.OrderLine(orderid, sku, qty)
-    with uow() as uow:
+    with uow_maker() as uow:
         batches = uow.batches.list()
         if not is_valid_sku(sku, batches):
             raise InvalidSku(f"Invalid sku {sku}")
@@ -40,8 +40,8 @@ def allocate(
 
 def add_batch(
         batchref: str, sku: str, qty: int, eta: Optional[date],
-        uow #: ContextManager[AbstractUnitOfWork],
+        uow_maker #: ContextManager[AbstractUnitOfWork],
     ) -> None:
-    with uow() as uow:
+    with uow_maker() as uow:
         uow.batches.add(model.Batch(batchref, sku, qty, eta))
         uow.commit()

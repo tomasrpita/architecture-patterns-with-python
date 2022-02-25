@@ -57,6 +57,7 @@ from contextlib import contextmanager
 @contextmanager
 def uow_maker(session_factory=DEFAULT_SESSION_FACTORY):
     uow = SqlAlchemyUnitOfWork(session_factory)
+    uow.session = uow.session_factory()
     uow.batches = repository.SqlAlchemyRepository(uow.session)
     yield uow
     uow.rollback()
