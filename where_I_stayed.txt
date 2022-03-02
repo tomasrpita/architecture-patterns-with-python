@@ -1,7 +1,7 @@
 This is a note for whwre i stayed in the book
 
 Chapter 7: Aggregates and Consistency Boundaries
-Part: Aggregates, Bounded Contexts, and Microservices
+Part: One Aggregate = One Repository
 
 Define "FLASK_APP": "src/allocation/entrypoints/flask_app.py" to test
 
@@ -10,7 +10,4 @@ To-do:
 	load the laterbatch, and this is a case of domain that is already
 	proven in their respective tests, why here it does not work well?
 
-
-
-
-
+	DO FakeRepository Of product

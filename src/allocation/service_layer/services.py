@@ -46,6 +46,19 @@ def is_valid_sku(sku, batches):
 #         uow.commit()
 
 
+def add_batch(
+        batchref: str, sku: str, qty: int, eta: Optional[date],
+        uow: unit_of_work.AbstractUnitOfWork,
+    ) -> None:
+    with uow:
+        product = uow.products.get(sku)
+        if product is None:
+            product = model.Product(sku, batches=[])
+            uow.products.add(product)
+        product.batches.add(model.Batch(batchref, sku, qty, eta))
+        uow.commit()
+
+
 def allocate(
         orderid: str, sku: str, qty: int,
         uow: unit_of_work.AbstractUnitOfWork,
@@ -60,14 +73,4 @@ def allocate(
     return batchref
 
 
-def add_batch(
-        batchref: str, sku: str, qty: int, eta: Optional[date],
-        uow: unit_of_work.AbstractUnitOfWork,
-    ) -> None:
-    with uow:
-        product = uow.products.get(sku)
-        if product is None:
-            product = model.Product(sku, batches=[])
-            uow.products.add(product)
-        product.batches.add(model.Batch(batchref, sku, qty, eta))
-        uow.commit()
+

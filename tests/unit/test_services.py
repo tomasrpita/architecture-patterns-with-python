@@ -6,8 +6,21 @@ import src.allocation.service_layer.unit_of_work as unit_of_work
 
 
 
+# class FakeRepository(repository.AbstractRepository):
 
-class FakeRepository(repository.AbstractRepository):
+#     def __init__(self, batches):
+#         self._batches = set(batches)
+
+#     def add(self, batch: model.Batch):
+#         self._batches.add(batch)
+
+#     def get(self, reference) -> model.Batch:
+#         return next(b for b in self._batches if b.reference == reference)
+
+#     def list(self) -> list:
+#         return list(self._batches)
+
+class FakeRepository(repository.AbstractProductRepository):
 
     def __init__(self, batches):
         self._batches = set(batches)
@@ -20,6 +33,7 @@ class FakeRepository(repository.AbstractRepository):
 
     def list(self) -> list:
         return list(self._batches)
+
 
 
 class FakeUnitOfWork(unit_of_work.AbstractUnitOfWork):
