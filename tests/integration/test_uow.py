@@ -23,7 +23,7 @@ def get_allocated_batch_ref(session, orderid, sku):
     return batchref
 
 
-
+@pytest.skip()
 def test_uow_can_retrieve_a_batch_and_allocate_to_it(session_factory):
     session = session_factory()
     insert_batch(session, "batch1", "LITTLE-PRETTY-CHARIS", 100, None)

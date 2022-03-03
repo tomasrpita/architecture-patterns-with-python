@@ -1,13 +1,10 @@
 This is a note for whwre i stayed in the book
 
 Chapter 7: Aggregates and Consistency Boundaries
-Part: One Aggregate = One Repository
+Part: Exercise for the Reader
 
 Define "FLASK_APP": "src/allocation/entrypoints/flask_app.py" to test
 
 To-do:
-	The test_apy, erroneously loads the early batch, when it should
-	load the laterbatch, and this is a case of domain that is already
-	proven in their respective tests, why here it does not work well?
 
-	DO FakeRepository Of product
+	test_product

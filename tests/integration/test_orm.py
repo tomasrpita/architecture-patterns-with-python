@@ -1,5 +1,6 @@
 import src.allocation.domain.model as model
 from datetime import date
+import pytest
 
 
 """
@@ -10,6 +11,8 @@ small additional step to implement another abstraction called the Repository pat
  faking out later in tests.
 
 """
+
+@pytest.skip()
 def test_ordeline_mapper_can_load_lines(session):
 	session.execute(
 		"INSERT INTO order_lines (orderid, sku, qty) VALUES "

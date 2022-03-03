@@ -83,7 +83,7 @@ class Batch:
 class Product:
     def __init__(self, sku: str, batches: List[Batch]) -> None:
         self.sku = sku
-        self.batches = batches
+        self.batches = set(batches)
 
     def allocate(self, line: OrderLine) -> str:
         try:
