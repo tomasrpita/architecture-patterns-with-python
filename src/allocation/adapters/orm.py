@@ -36,11 +36,28 @@ allocations = Table(
 )
 
 
+products = Table(
+	"products",
+	metadata,
+	Column("id", Integer, primary_key=True, autoincrement=True),
+	Column("sku", String(255)),
+)
+
+
+products_batches = Table(
+	"products_batches",
+	metadata,
+	Column("id", Integer, primary_key=True, autoincrement=True),
+	Column("product_id", ForeignKey("products.id")),
+	Column("batch_id", ForeignKey("batches.id")),
+)
+
+
 def start_mappers():
 	# When we call the mapper function, SQLAlchemy does its magic to bind
 	# our domain model classes to the various tables we’ve defined.
 	lines_mapper = mapper(model.OrderLine, order_lines)
-	mapper(
+	batches_mapper = mapper(
 		model.Batch,
 		batches,
 		properties={
@@ -49,3 +66,8 @@ def start_mappers():
 			)
 		},
 	)
+	products_mapper = mapper(model.Product, products, properties={
+		"batches": relationship(
+			batches_mapper, secondary=products_batches, collection_class=set,
+		)
+	})

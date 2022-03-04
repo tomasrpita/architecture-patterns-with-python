@@ -5,22 +5,6 @@ import src.allocation.service_layer.services as services
 import src.allocation.service_layer.unit_of_work as unit_of_work
 
 
-
-# class FakeRepository(repository.AbstractRepository):
-
-#     def __init__(self, batches):
-#         self._batches = set(batches)
-
-#     def add(self, batch: model.Batch):
-#         self._batches.add(batch)
-
-#     def get(self, reference) -> model.Batch:
-#         return next(b for b in self._batches if b.reference == reference)
-
-#     def list(self) -> list:
-#         return list(self._batches)
-
-
 class FakeRepository(repository.AbstractProductRepository):
 
     def __init__(self, products):
@@ -30,7 +14,7 @@ class FakeRepository(repository.AbstractProductRepository):
 
     def add(self, product: model.Product):
         self._products.add(product)
-        
+
 
     def get(self, sku) -> model.Product:
         return next((p for p in self._products if p.sku == sku), None)
@@ -56,14 +40,14 @@ def test_add_batch_for_new_product():
     uow = FakeUnitOfWork()
 
     services.add_batch("b1", "CRUNCHY-ARMCHAIR", 100, None, uow)
-    
+
     assert uow.products.get("CRUNCHY-ARMCHAIR") is not None
     assert uow.committed
 
 
 def test_add_batch_for_existing_product():
     uow = FakeUnitOfWork()
-    
+
     services.add_batch("b1", "CRUNCHY-ARMCHAIR", 100, None, uow)
     services.add_batch("b2", "CRUNCHY-ARMCHAIR", 99, None, uow)
 

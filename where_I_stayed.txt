@@ -7,4 +7,4 @@ Define "FLASK_APP": "src/allocation/entrypoints/flask_app.py" to test
 
 To-do:
 
-	test_services
+	Test e2e
