@@ -12,6 +12,7 @@ orm.start_mappers()
 app = Flask(__name__)
 
 
+
 @app.route("/allocate", methods=["POST"])
 def allocate_endpoint():
     try:
