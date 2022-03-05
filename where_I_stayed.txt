@@ -1,10 +1,10 @@
 This is a note for whwre i stayed in the book
 
 Chapter 7: Aggregates and Consistency Boundaries
-Part: Exercise for the Reader
+Part: Exercise for the Reader Finished
 
 Define "FLASK_APP": "src/allocation/entrypoints/flask_app.py" to test
 
 To-do:
 
-	Test e2e
+

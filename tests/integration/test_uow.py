@@ -36,17 +36,17 @@ def get_allocated_batch_ref(session, orderid, sku):
 
 def test_uow_can_retrieve_a_batch_and_allocate_to_it(session_factory):
     session = session_factory()
-    insert_batch(session, "batch1", "LITTLE-PRETTY-CHARIS", 100, None)
+    insert_batch(session, "batch1", "LITTLE-PRETTY-CHAIR", 100, None)
     session.commit()
 
     uow = unit_of_work.SqlAlchemyUnitOfWork(session_factory)
     with uow:
-        product = uow.products.get(sku="LITTLE-PRETTY-CHARIS")
-        line = model.OrderLine("o1", "LITTLE-PRETTY-CHARIS", 10)
+        product = uow.products.get(sku="LITTLE-PRETTY-CHAIR")
+        line = model.OrderLine("o1", "LITTLE-PRETTY-CHAIR", 10)
         product.allocate(line)
         uow.commit()
 
-    batchref = get_allocated_batch_ref(session, "o1", "LITTLE-PRETTY-CHARIS")
+    batchref = get_allocated_batch_ref(session, "o1", "LITTLE-PRETTY-CHAIR")
     assert batchref == "batch1"
 
 
