@@ -41,6 +41,7 @@ products = Table(
 	metadata,
 	Column("id", Integer, primary_key=True, autoincrement=True),
 	Column("sku", String(255)),
+	Column("version_number", Integer, nullable=False),
 )
 
 
