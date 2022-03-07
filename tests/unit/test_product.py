@@ -25,6 +25,7 @@ def test_prefers_earlier_batches():
     medium = Batch("normal-batch", "MINIMALIST-SPOON", 100, eta=tomorrow)
     latest = Batch("slow-batch", "MINIMALIST-SPOON", 100, eta=later)
     product = Product(sku="MINIMALIST.SPOON", batches=[latest, earliest, medium])
+    # product = Product(sku="MINIMALIST.SPOON", batches=[ earliest])
     line = OrderLine("order1", "MINIMALIST-SPOON", 10)
 
     product.allocate(line)
@@ -42,7 +43,7 @@ def test_returns_allocated_batch_ref():
 
     allocation = product.allocate(line)
 
-    assert allocation == in_stock_batch.reference 
+    assert allocation == in_stock_batch.reference
 
 
 def test_raises_out_of_stock_exception_if_cannot_allocate():

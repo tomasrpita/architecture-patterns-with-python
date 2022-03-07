@@ -28,7 +28,7 @@ class SqlAlchemyRepository(AbstractProductRepository):
 
     def get(self, sku) -> model.Product:
         # return self.session.query(model.Batch).filter_by(reference=reference).one()
-        return self._session.query(model.Product).filter_by(sku=sku).one()
+        return self._session.query(model.Product).filter_by(sku=sku).one_or_none()
         # batches = self._session.query(model.Batch).filter_by(
         #     sku=sku).all()
         # if batches:
