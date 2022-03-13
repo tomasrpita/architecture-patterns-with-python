@@ -1,12 +1,11 @@
 This is a note for whwre i stayed in the book
 
 Chapter 7: Aggregates and Consistency Boundaries
-Part: Optimistic Concurrency with Version Numbers
+Part: finished
 
 Define "FLASK_APP": "src/allocation/entrypoints/flask_app.py" to test
 
 To-do:
 
-	check changes  self.batches = set(batches)in self.batches = batches in Product.__init__
-	test_concurrent_updates_to_version_are_not_allowed(postgres_session_factory)
+
 

@@ -2,8 +2,8 @@ import abc
 import src.allocation.domain.model as model
 
 
+# Aggregates are your entrypoints into the domain model
 class AbstractProductRepository(abc.ABC):
-
         @abc.abstractclassmethod
         def add(self, product):
             raise NotImplementedError
@@ -18,7 +18,6 @@ class AbstractProductRepository(abc.ABC):
 
 
 class SqlAlchemyRepository(AbstractProductRepository):
-
     def __init__(self, session):
         self._session = session
 

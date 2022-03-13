@@ -70,9 +70,9 @@ class Batch:
 class Product:
     def __init__(self, sku: str, batches: List[Batch],
         version_number: int = 0
-    ) -> None:
+    ):
         self.sku = sku
-        self.batches = set(batches)
+        self.batches = batches
         self.version_number = version_number
 
     def allocate(self, line: OrderLine) -> str:

@@ -6,7 +6,7 @@ import src.allocation.domain.model as model
 import src.allocation.service_layer.unit_of_work as unit_of_work
 import pytest
 
-from tests.e2e.test_api import random_batchref, random_orderid, random_sku
+from  tests.random_refs import random_batchref, random_orderid, random_sku
 
 
 def insert_batch(session, ref, sku, qty, eta, product_version=1):
@@ -19,6 +19,7 @@ def insert_batch(session, ref, sku, qty, eta, product_version=1):
         " VALUES (:ref, :sku, :qty, :eta)",
         dict(ref=ref, sku=sku, qty=qty, eta=eta),
     )
+    # it is not necessary
     # session.execute(
     #     "INSERT INTO products_batches (product_id, batch_id)"
     #     " SELECT id, id FROM products WHERE sku = :sku",
@@ -38,7 +39,7 @@ def get_allocated_batch_ref(session, orderid, sku):
     )
     return batchref
 
-@pytest.mark.skip()
+
 def test_uow_can_retrieve_a_batch_and_allocate_to_it(session_factory):
     session = session_factory()
     insert_batch(session, "batch1", "LITTLE-PRETTY-CHAIR", 100, None)
@@ -54,7 +55,7 @@ def test_uow_can_retrieve_a_batch_and_allocate_to_it(session_factory):
     batchref = get_allocated_batch_ref(session, "o1", "LITTLE-PRETTY-CHAIR")
     assert batchref == "batch1"
 
-@pytest.mark.skip()
+
 def test_rolls_back_uncommitted_work_by_default(session_factory):
     uow = unit_of_work.SqlAlchemyUnitOfWork(session_factory)
     with uow:
@@ -65,7 +66,6 @@ def test_rolls_back_uncommitted_work_by_default(session_factory):
     assert rows == []
 
 
-@pytest.mark.skip()
 def test_rolls_back_on_error(session_factory):
     class MyException(Exception):
         pass
@@ -92,7 +92,7 @@ def try_to_allocate(orderid, sku, exceptions):
             time.sleep(0.2)
             uow.commit()
     except Exception as e:
-        # print(traceback.format_exc())
+        print(traceback.format_exc())
         exceptions.append(e)
 
 # @pytest.mark.skip("do this for an advanced challenge")
@@ -123,14 +123,13 @@ def test_concurrent_updates_to_version_are_not_allowed(postgres_session_factory)
     [exception] = exceptions
     assert "could not serialize access due to concurrent update" in str(exception)
 
-
-    # orders = session.execute(
-    #     "SELECT orderid FROM allocations"
-    #     " JOIN batches ON allocations.batch_id = batches.id"
-    #     " JOIN order_lines ON allocations.orderline_id = order_lines.id"
-    #     " WHERE order_lines.sku=:sku",
-    #     dict(sku=sku),
-    # )
-    # assert orders.rowcount == 1
-    # with unit_of_work.SqlAlchemyUnitOfWork() as uow:
-    #     uow.session.execute("select 1")
+    orders = session.execute(
+        "SELECT orderid FROM allocations"
+        " JOIN batches ON allocations.batch_id = batches.id"
+        " JOIN order_lines ON allocations.orderline_id = order_lines.id"
+        " WHERE order_lines.sku=:sku",
+        dict(sku=sku),
+    )
+    assert orders.rowcount == 1
+    with unit_of_work.SqlAlchemyUnitOfWork() as uow:
+        uow.session.execute("select 1")

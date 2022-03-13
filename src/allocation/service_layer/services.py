@@ -55,7 +55,7 @@ def add_batch(
         if product is None:
             product = model.Product(sku, batches=[])
             uow.products.add(product)
-        product.batches.add(model.Batch(batchref, sku, qty, eta))
+        product.batches.append(model.Batch(batchref, sku, qty, eta))
         uow.commit()
 
 
@@ -71,6 +71,3 @@ def allocate(
         batchref = product.allocate(line)
         uow.commit()
     return batchref
-
-
-

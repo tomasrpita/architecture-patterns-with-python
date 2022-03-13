@@ -6,9 +6,7 @@ import src.allocation.service_layer.unit_of_work as unit_of_work
 
 
 class FakeRepository(repository.AbstractProductRepository):
-
     def __init__(self, products):
-
         self._products = set(products)
 
 

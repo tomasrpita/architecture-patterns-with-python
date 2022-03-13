@@ -2,10 +2,9 @@ import abc
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+
 import src.allocation.adapters.repository as repository
 import src.allocation.config as config
-
-
 
 
 class AbstractUnitOfWork(abc.ABC):
@@ -26,13 +25,16 @@ class AbstractUnitOfWork(abc.ABC):
         raise NotImplementedError
 
 
-
+# Enforcing Concurrency Rules by Using Database Transaction Isolation Levels
+# To get the test to pass as it is, we can set the transaction isolation level
+# on our session:
 DEFAULT_SESSION_FACTORY = sessionmaker(
     bind=create_engine(
         config.get_postgres_uri(),
-        isolation_level="REPEATABLE READ",
+        isolation_level="REPEATABLE READ", # <-- this is the key
     )
 )
+
 
 class SqlAlchemyUnitOfWork(AbstractUnitOfWork):
     def __init__(self, session_factory=DEFAULT_SESSION_FACTORY):
