@@ -19,12 +19,6 @@ def insert_batch(session, ref, sku, qty, eta, product_version=1):
         " VALUES (:ref, :sku, :qty, :eta)",
         dict(ref=ref, sku=sku, qty=qty, eta=eta),
     )
-    # it is not necessary
-    # session.execute(
-    #     "INSERT INTO products_batches (product_id, batch_id)"
-    #     " SELECT id, id FROM products WHERE sku = :sku",
-    #     dict(sku=sku),
-    # )
 
 
 def get_allocated_batch_ref(session, orderid, sku):
@@ -95,7 +89,7 @@ def try_to_allocate(orderid, sku, exceptions):
         print(traceback.format_exc())
         exceptions.append(e)
 
-# @pytest.mark.skip("do this for an advanced challenge")
+
 def test_concurrent_updates_to_version_are_not_allowed(postgres_session_factory):
     sku, batch = random_sku(), random_batchref()
     session = postgres_session_factory()

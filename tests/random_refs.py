@@ -1,9 +1,6 @@
 import uuid
 
 
-import uuid
-
-
 def random_suffix():
     return str(uuid.uuid4())[:6]
 

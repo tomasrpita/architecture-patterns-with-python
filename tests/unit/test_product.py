@@ -1,5 +1,4 @@
 from datetime import date, timedelta
-from itertools import product
 import pytest
 from src.allocation.domain.model import OrderLine, Batch, Product, OutOfStock
 
@@ -25,7 +24,6 @@ def test_prefers_earlier_batches():
     medium = Batch("normal-batch", "MINIMALIST-SPOON", 100, eta=tomorrow)
     latest = Batch("slow-batch", "MINIMALIST-SPOON", 100, eta=later)
     product = Product(sku="MINIMALIST.SPOON", batches=[latest, earliest, medium])
-    # product = Product(sku="MINIMALIST.SPOON", batches=[ earliest])
     line = OrderLine("order1", "MINIMALIST-SPOON", 10)
 
     product.allocate(line)
