@@ -1,7 +1,7 @@
 This is a note for whwre i stayed in the book
 
 Chapter 8: Events and the Message Bus
-Part: The Message Bus Maps Events to Handlers
+Part: Option 3: The UoW Publishes Events to the Message Bus
 
 Define "FLASK_APP": "src/allocation/entrypoints/flask_app.py" to test
 
