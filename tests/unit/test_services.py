@@ -7,14 +7,15 @@ import src.allocation.service_layer.unit_of_work as unit_of_work
 
 class FakeRepository(repository.AbstractRepository):
     def __init__(self, products):
+        super().__init__()
         self._products = set(products)
 
 
-    def add(self, product: model.Product):
+    def _add(self, product: model.Product):
         self._products.add(product)
 
 
-    def get(self, sku) -> model.Product:
+    def _get(self, sku) -> model.Product:
         return next((p for p in self._products if p.sku == sku), None)
 
 
@@ -23,7 +24,12 @@ class FakeUnitOfWork(unit_of_work.AbstractUnitOfWork):
         self.products = FakeRepository([])
         self.committed = False
 
+    # This is momentary to avoid:
+    # AttributeError: 'FakeRepository' object has no attribute 'events'
     def commit(self):
+        self._commit()
+
+    def _commit(self):
         self.committed = True
 
     def rollback(self):
