@@ -5,7 +5,7 @@ import src.allocation.service_layer.services as services
 import src.allocation.service_layer.unit_of_work as unit_of_work
 
 
-class FakeRepository(repository.AbstractProductRepository):
+class FakeRepository(repository.AbstractRepository):
     def __init__(self, products):
         self._products = set(products)
 
