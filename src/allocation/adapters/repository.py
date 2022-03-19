@@ -1,5 +1,4 @@
 import abc
-from itertools import product
 import src.allocation.domain.model as model
 
 

@@ -1,9 +1,9 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, Date
+from sqlalchemy import MetaData, Table, event
 from sqlalchemy.orm import mapper, relationship
-from sqlalchemy import MetaData, Table
-
 
 import src.allocation.domain.model as model
+
 
 metadata = MetaData()
 
@@ -60,3 +60,10 @@ def start_mappers():
 	mapper(
         model.Product, products, properties={"batches": relationship(batches_mapper)}
     )
+
+
+# https://docs.sqlalchemy.org/en/14/orm/events.html#instance-events
+@event.listens_for(model.Product, "load")
+def receive_load(product, _): # _ is the "context" argument
+	print("Loaded product: {}".format(product))
+	product.events = []

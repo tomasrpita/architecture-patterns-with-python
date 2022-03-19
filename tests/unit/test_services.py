@@ -26,8 +26,8 @@ class FakeUnitOfWork(unit_of_work.AbstractUnitOfWork):
 
     # This is momentary to avoid:
     # AttributeError: 'FakeRepository' object has no attribute 'events'
-    def commit(self):
-        self._commit()
+    # def commit(self):
+    #     self._commit()
 
     def _commit(self):
         self.committed = True

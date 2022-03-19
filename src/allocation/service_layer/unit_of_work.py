@@ -23,15 +23,16 @@ class AbstractUnitOfWork(abc.ABC):
 
     def publish_events(self):
         for product in self.products.seen:
-            # while products.events:
-            while self.products.events:
+            # print(type(product))
+            print(dir(product))
+            while product.events:
                 event = product.events.pop(0)
                 messagebus.handle(event)
+
 
     @abc.abstractmethod
     def _commit(self):
         raise NotImplementedError
-
 
 
     @abc.abstractmethod
