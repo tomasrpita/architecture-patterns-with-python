@@ -10,10 +10,8 @@ class FakeRepository(repository.AbstractRepository):
         super().__init__()
         self._products = set(products)
 
-
     def _add(self, product: model.Product):
         self._products.add(product)
-
 
     def _get(self, sku) -> model.Product:
         return next((p for p in self._products if p.sku == sku), None)
@@ -23,11 +21,6 @@ class FakeUnitOfWork(unit_of_work.AbstractUnitOfWork):
     def __init__(self):
         self.products = FakeRepository([])
         self.committed = False
-
-    # This is momentary to avoid:
-    # AttributeError: 'FakeRepository' object has no attribute 'events'
-    # def commit(self):
-    #     self._commit()
 
     def _commit(self):
         self.committed = True
@@ -76,3 +69,8 @@ def test_allocate_commits():
     services.add_batch("batch-1", "sku-1", 100, "2011-01-01", uow)
     services.allocate("order-1", "sku-1", 10, uow)
     assert uow.committed is True
+
+
+# Why do we do this test? and using mock? and ussing unittest???
+# def test_sends_email_on_out_of_stock_error():
+

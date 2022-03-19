@@ -23,17 +23,13 @@ class AbstractUnitOfWork(abc.ABC):
 
     def publish_events(self):
         for product in self.products.seen:
-            # print(type(product))
-            print(dir(product))
             while product.events:
                 event = product.events.pop(0)
                 messagebus.handle(event)
 
-
     @abc.abstractmethod
     def _commit(self):
         raise NotImplementedError
-
 
     @abc.abstractmethod
     def rollback(self):
@@ -57,14 +53,6 @@ class SqlAlchemyUnitOfWork(AbstractUnitOfWork):
         self.session = None
         self.committed = False
 
-    def _commit(self):
-        self.session.commit()
-        self.committed = True
-
-    def rollback(self):
-        if self.committed:
-            self.session.rollback()
-
     def __enter__(self):
         self.session = self.session_factory()
         self.products = repository.SqlAlchemyRepository(self.session)
@@ -73,3 +61,11 @@ class SqlAlchemyUnitOfWork(AbstractUnitOfWork):
     def __exit__(self, *args):
         super().__exit__(*args)
         self.session.close()
+
+    def _commit(self):
+        self.session.commit()
+        self.committed = True
+
+    def rollback(self):
+        if self.committed:
+            self.session.rollback()

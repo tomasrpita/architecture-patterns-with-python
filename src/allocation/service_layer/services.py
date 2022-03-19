@@ -8,7 +8,6 @@ following a bunch of simple steps:
 """
 
 from datetime import date
-from math import prod
 from typing import Optional
 
 import src.allocation.domain.model as model

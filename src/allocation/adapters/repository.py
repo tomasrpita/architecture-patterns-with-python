@@ -1,4 +1,5 @@
 import abc
+from typing import Set
 import src.allocation.domain.model as model
 
 
@@ -30,10 +31,10 @@ class AbstractRepository(abc.ABC):
 class SqlAlchemyRepository(AbstractRepository):
     def __init__(self, session):
         super().__init__()
-        self._session = session
+        self.session = session
 
     def _add(self, product: model.Product):
-        self._session.add(product)
+        self.session.add(product)
 
     def _get(self, sku) -> model.Product:
-        return self._session.query(model.Product).filter_by(sku=sku).one_or_none()
+        return self.session.query(model.Product).filter_by(sku=sku).one_or_none()

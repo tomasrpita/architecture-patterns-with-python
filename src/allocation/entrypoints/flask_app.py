@@ -2,7 +2,6 @@ from datetime import datetime
 from flask import Flask, request
 
 
-import src.allocation.domain.model as model
 import src.allocation.adapters.orm as orm
 import src.allocation.service_layer.services as services
 import src.allocation.service_layer.unit_of_work as unit_of_work
@@ -22,7 +21,7 @@ def allocate_endpoint():
             unit_of_work.SqlAlchemyUnitOfWork()
         )
 
-    except (model.OutOfStock, services.InvalidSku) as e:
+    except (services.InvalidSku) as e:
         return {"message": str(e)}, 400
 
     return {"batchref": batchref}, 201

@@ -53,17 +53,20 @@ def start_mappers():
 		batches,
 		properties={
 			"_allocations": relationship(
-				lines_mapper, secondary=allocations, collection_class=set,
+				lines_mapper,
+				secondary=allocations,
+				collection_class=set,
 			)
 		},
 	)
 	mapper(
-        model.Product, products, properties={"batches": relationship(batches_mapper)}
+        model.Product, products,
+		properties={"batches": relationship(batches_mapper)}
     )
 
 
+# a little hack in the orm so that events work
 # https://docs.sqlalchemy.org/en/14/orm/events.html#instance-events
 @event.listens_for(model.Product, "load")
 def receive_load(product, _): # _ is the "context" argument
-	print("Loaded product: {}".format(product))
 	product.events = []

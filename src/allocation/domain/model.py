@@ -4,12 +4,6 @@ from datetime import date
 from . import events
 
 
-class OutOfStock(Exception):
-    """
-    Exception raised when a product is out of stock.
-    """
-    pass
-
 # @dataclass(frozen=True)
 @dataclass(unsafe_hash=True)
 class OrderLine:
@@ -53,7 +47,6 @@ class Batch:
     def available_quantity(self) -> int:
         return self._purchased_quantity - self.allocated_quantity
 
-
     def allocate(self, line: OrderLine):
         if self.can_allocate(line):
             self._allocations.add(line)
@@ -62,12 +55,12 @@ class Batch:
         if line in self._allocations:
             self._allocations.remove(line)
 
-
     def can_allocate(self, line: OrderLine) -> bool:
         return self.available_quantity >= line.qty\
             and self.sku == line.sku
 
 
+# This is our Agregate Root.
 class Product:
     def __init__(self, sku: str, batches: List[Batch],
         version_number: int = 0
@@ -87,4 +80,3 @@ class Product:
             # raise OutOfStock(f"Out of stock for sku {line.sku}")
             self.events.append(events.OutOfStock(line.sku))
             return None
-
