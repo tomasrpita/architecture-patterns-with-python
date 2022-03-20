@@ -72,5 +72,13 @@ def test_allocate_commits():
 
 
 # Why do we do this test? and using mock? and ussing unittest???
-# def test_sends_email_on_out_of_stock_error():
-
+from unittest import mock
+def test_sends_email_on_out_of_stock_error():
+    uow = FakeUnitOfWork()
+    services.add_batch("b1", "POPULAR-CURTAINS", 9, None, uow)
+    with mock.patch("src.allocation.adapters.email.send_mail") as mock_send_mail:
+        services.allocate("o1", "POPULAR-CURTAINS", 10, uow)
+        assert mock_send_mail.call_args == mock.call(
+            "stock@made.com",
+            f"Out of stock for POPULAR-CURTAINS",
+        )
