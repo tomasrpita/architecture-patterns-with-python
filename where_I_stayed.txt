@@ -1,7 +1,8 @@
 This is a note for whwre i stayed in the book
 
-Chapter 8: Events and the Message Bus
-Part: Finished
+Chapter 9: Going to Town on the Message Bus
+Part: Refactoring Service Functions to Message Handlers
+
 Define "FLASK_APP": "src/allocation/entrypoints/flask_app.py" to test
 
 To-do:
