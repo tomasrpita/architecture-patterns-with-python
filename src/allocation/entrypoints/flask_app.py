@@ -3,7 +3,7 @@ from flask import Flask, request
 
 
 import src.allocation.adapters.orm as orm
-import src.allocation.service_layer.services as services
+import allocation.service_layer.handlers as handlers
 import src.allocation.service_layer.unit_of_work as unit_of_work
 
 
@@ -14,14 +14,14 @@ app = Flask(__name__)
 @app.route("/allocate", methods=["POST"])
 def allocate_endpoint():
     try:
-        batchref = services.allocate(
+        batchref = handlers.allocate(
             request.json["orderid"],
             request.json["sku"],
             request.json["qty"],
             unit_of_work.SqlAlchemyUnitOfWork()
         )
 
-    except (services.InvalidSku) as e:
+    except (handlers.InvalidSku) as e:
         return {"message": str(e)}, 400
 
     return {"batchref": batchref}, 201
@@ -34,7 +34,7 @@ def add_batch_endpoint():
     if eta is not None:
         eta = datetime.fromisoformat(eta).date()
 
-    services.add_batch(
+    handlers.add_batch(
         request.json["batchref"],
         request.json["sku"],
         request.json["qty"],
