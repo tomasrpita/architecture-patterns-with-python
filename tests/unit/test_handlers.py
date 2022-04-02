@@ -1,4 +1,5 @@
 import pytest
+from src.allocation.service_layer import handlers
 import src.allocation.adapters.repository as repository
 import src.allocation.domain.model as model
 import src.allocation.domain.events as events
@@ -31,7 +32,7 @@ class FakeUnitOfWork(unit_of_work.AbstractUnitOfWork):
 
 
 class TestAddBatch:
-    def test_add_batch_for_new_product(self):
+    def test_add_for_new_product(self):
         uow = FakeUnitOfWork()
 
         messagebus.handle(
@@ -43,13 +44,19 @@ class TestAddBatch:
         assert uow.committed
 
 
-# def test_add_batch_for_existing_product():
-#     uow = FakeUnitOfWork()
+    def test_add_for_existing_product(self):
+        uow = FakeUnitOfWork()
 
-#     handlers.add_batch("b1", "CRUNCHY-ARMCHAIR", 100, None, uow)
-#     handlers.add_batch("b2", "CRUNCHY-ARMCHAIR", 99, None, uow)
+        messagebus.handle(
+            events.BatchCreated("b1", "CRUNCHY-ARMCHAIR", 100, None),
+            uow
+        )
+        messagebus.handle(
+            events.BatchCreated("b2", "CRUNCHY-ARMCHAIR", 100, None),
+            uow
+        )
 
-#     assert "b2" in [b.reference for b in uow.products.get("CRUNCHY-ARMCHAIR").batches]
+        assert "b2" in [b.reference for b in uow.products.get("CRUNCHY-ARMCHAIR").batches]
 
 
 class TestAllocate:
@@ -69,29 +76,56 @@ class TestAllocate:
         assert "batch1" == result
 
 
-# def test_allocate_errors_for_invalid_sku():
-#     uow = FakeUnitOfWork()
-#     handlers.add_batch("batch-1", "sku-2", 100, "2011-01-01", uow)
+    def test_allocate_errors_for_invalid_sku(self):
+        uow = FakeUnitOfWork()
 
-#     with pytest.raises(handlers.InvalidSku, match="Invalid sku sku-1"):
-#         handlers.allocate("order-1", "sku-1", 10, uow)
+        messagebus.handle(
+            events.BatchCreated("batch-1", "sku-0", 100, "2011-01-01"),
+            uow
+        )
+
+        with pytest.raises(
+            handlers.InvalidSku, match="Invalid sku sku-1"
+        ):
+            messagebus.handle(
+                events.AllocationRequired("order-1", "sku-1", 10),
+                uow
+            )
 
 
-# def test_allocate_commits():
-#     uow = FakeUnitOfWork()
-#     handlers.add_batch("batch-1", "sku-1", 100, "2011-01-01", uow)
-#     handlers.allocate("order-1", "sku-1", 10, uow)
-#     assert uow.committed is True
+    def test_commits(self):
+        uow = FakeUnitOfWork()
+
+        messagebus.handle(
+            events.BatchCreated("batch-1", "sku-1", 100, "2011-01-01"),
+            uow
+        )
+        messagebus.handle(
+            events.AllocationRequired("order-1", 'sku-1', 10),
+            uow
+        )
+
+        assert uow.committed is True
 
 
 # Why do we do this test? and using mock? and ussing unittest???
-# from unittest import mock
-# def test_sends_email_on_out_of_stock_error():
-#     uow = FakeUnitOfWork()
-#     handlers.add_batch("b1", "POPULAR-CURTAINS", 9, None, uow)
-#     with mock.patch("src.allocation.adapters.email.send_mail") as mock_send_mail:
-#         handlers.allocate("o1", "POPULAR-CURTAINS", 10, uow)
-#         assert mock_send_mail.call_args == mock.call(
-#             "stock@made.com",
-#             f"Out of stock for POPULAR-CURTAINS",
-#         )
+# TODO: Make Work
+from unittest import mock
+@pytest.mark.skip(reason="Don't work")
+def test_sends_email_on_out_of_stock_error():
+    uow = FakeUnitOfWork()
+
+    messagebus.handle(
+        events.BatchCreated("batch-1", "POPULAR-CURTAINS", 9, "2011-01-01"),
+        uow
+    )
+
+    with mock.patch("src.allocation.adapters.email.send_mail") as mock_send_mail:
+        messagebus.handle(
+            events.AllocationRequired("o1", "POPULAR-CURTAINS", 10),
+            uow
+        )
+        assert mock_send_mail.call_args == mock.call(
+            "stock@made.com",
+            f"Out of stock for POPULAR-CURTAINS",
+        )

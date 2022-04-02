@@ -80,6 +80,7 @@ def allocate(
         return batchref
 
 
+# TODO: make work
 def send_out_stock_notification(
         event: events.OutOfStock,
         uow: unit_of_work.AbstractUnitOfWork,
