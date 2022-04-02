@@ -69,11 +69,11 @@ class TestAllocate:
         )
 
         # result = handlers.allocate("ord-1", "COMPLICATED-LAMP", 10, uow)
-        result = messagebus.handle(
+        results = messagebus.handle(
             events.AllocationRequired("o1", "COMPLICATED-LAMP", 10),
             uow
-        )[0] # A Temporary Ugly Hack: The Message Bus Has to Return Results
-        assert "batch1" == result
+        )
+        assert "batch1" == results.pop(0)
 
 
     def test_allocate_errors_for_invalid_sku(self):
