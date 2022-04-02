@@ -1,22 +1,42 @@
 from typing import List, Callable, Dict, Type
 from ..domain import events
-from ..adapters import email
+# from ..adapters import email
+# import handlers
+# import unit_of_work
+from . import handlers
+from . import unit_of_work
 
 
-def handle(event: events.Event):
-	for handler in HANDLERS[type(event)]:
-		handler(event)
+# def handle(event: events.Event):
+# 	for handler in HANDLERS[type(event)]:
+
+def handle(
+	event: events.Event,
+	uow: unit_of_work.AbstractUnitOfWork
+):
+	# A Temporary Ugly Hack: The Message Bus Has to Return Results
+	results = []
+	queue = [event]
+	while queue:
+		event = queue.pop(0)
+		for handler in HANDLERS[type(event)]:
+			# handler(event, uow=uow)
+			results.append(handler(event, uow=uow))
+			queue.extend(uow.collect_new_events())
+	return results
 
 
-def send_out_stock_notification(event: events.OutOfStock):
-	email.send_mail(
-		"stock@made.com",
-		f"Out of stock for {event.sku}"
-	)
+# def send_out_stock_notification(event: events.OutOfStock):
+# 	email.send_mail(
+# 		"stock@made.com",
+# 		f"Out of stock for {event.sku}"
+# 	)
 
 
 HANDLERS = {
-	events.OutOfStock: [send_out_stock_notification]
+	events.OutOfStock: [handlers.send_out_stock_notification],
+	events.BatchCreated: [handlers.add_batch],
+	events.AllocationRequired: [handlers.allocate]
 } # type: Dict[Type[events.Event], List[Callable[[events.Event], None]]]
 
 # Note that the message bus as implemented doesn’t give us concurrency because only

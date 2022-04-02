@@ -11,13 +11,13 @@ class OutOfStock(Event):
 
 @dataclass
 class BatchCreated(Event):
-	ref: str
+	batchref: str
 	sku: str
 	qty: int
 	eta: Optional[date] = None
 
 @dataclass
 class AllocationRequired(Event):
-	order_id: str
+	orderid: str
 	sku: str
 	qty: int

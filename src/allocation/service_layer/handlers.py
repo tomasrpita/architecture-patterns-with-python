@@ -10,9 +10,9 @@ following a bunch of simple steps:
 from datetime import date
 from typing import Optional
 
-from domain import events
-from adapters import email
+import src.allocation.adapters.email as email
 import src.allocation.domain.model as model
+import src.allocation.domain.events as events
 import src.allocation.service_layer.unit_of_work as unit_of_work
 
 
@@ -58,7 +58,7 @@ def add_batch(
     with uow:
         product = uow.products.get(sku=event.sku)
         if product is None:
-            product = model.Product(event.skusku, batches=[])
+            product = model.Product(event.sku, batches=[])
             uow.products.add(product)
         product.batches.append(
             model.Batch(event.batchref, event.sku, event.qty, event.eta)

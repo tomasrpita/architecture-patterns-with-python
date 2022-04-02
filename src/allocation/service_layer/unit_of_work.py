@@ -5,7 +5,6 @@ from sqlalchemy.orm import sessionmaker
 
 import src.allocation.adapters.repository as repository
 import src.allocation.config as config
-from . import messagebus
 
 
 class AbstractUnitOfWork(abc.ABC):
@@ -19,16 +18,21 @@ class AbstractUnitOfWork(abc.ABC):
 
     def commit(self):
         self._commit()
-        self.publish_events()
+        # self.publish_events()
 
-    def publish_events(self):
+    # def publish_events(self):
+    #     for product in self.products.seen:
+    #         # this could cause unexpected performance problems in your
+    #         # web endpoints (adding asynchronous processing is possible
+    #         # but makes things even more confusing).
+    #         while product.events:
+    #             event = product.events.pop(0)
+    #             messagebus.handle(event)
+
+    def collect_new_events(self):
         for product in self.products.seen:
-            # this could cause unexpected performance problems in your
-            # web endpoints (adding asynchronous processing is possible
-            # but makes things even more confusing).
             while product.events:
-                event = product.events.pop(0)
-                messagebus.handle(event)
+                yield product.events(0)
 
     @abc.abstractmethod
     def _commit(self):
