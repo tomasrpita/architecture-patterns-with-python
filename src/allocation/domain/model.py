@@ -80,3 +80,5 @@ class Product:
             # raise OutOfStock(f"Out of stock for sku {line.sku}")
             self.events.append(events.OutOfStock(line.sku))
             return None
+
+

@@ -1,7 +1,7 @@
 This is a note for whwre I stayed in the book
 
 Chapter 9: Going to Town on the Message Bus
-Part: Modifying Our API to Work with Events
+Part: Test-Driving a New Handler
 
 Define "FLASK_APP": "src/allocation/entrypoints/flask_app.py" to test
 

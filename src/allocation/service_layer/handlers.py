@@ -19,6 +19,9 @@ import src.allocation.service_layer.unit_of_work as unit_of_work
 class InvalidSku(Exception):
     pass
 
+class InvalidBatchref(Exception):
+    pass
+
 
 def is_valid_sku(sku, batches):
     return sku in {b.sku for b in batches}
@@ -78,6 +81,19 @@ def allocate(
         batchref = product.allocate(line)
         uow.commit()
         return batchref
+
+def change_batch_quantity(
+    event: events.BatchQuantityChanged,
+    uow: unit_of_work.AbstractUnitOfWork
+    ):
+    with uow:
+        product = uow.products.get_by_batchref(event.ref)
+        if product is None:
+            raise InvalidBatchref(f"Invalid batch reference {event.ref}")
+        product.change_batch_quantity(ref=event.ref, qty=event.qty)
+        uow.commit()
+
+
 
 
 # TODO: make work

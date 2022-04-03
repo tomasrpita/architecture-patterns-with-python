@@ -5,9 +5,11 @@ from datetime import date
 class Event:
 	pass
 
+
 @dataclass
 class OutOfStock(Event):
 	sku: str
+
 
 @dataclass
 class BatchCreated(Event):
@@ -16,8 +18,16 @@ class BatchCreated(Event):
 	qty: int
 	eta: Optional[date] = None
 
+
 @dataclass
 class AllocationRequired(Event):
 	orderid: str
 	sku: str
 	qty: int
+
+
+@dataclass
+class BatchQuantityChanged(Event):
+	ref: str
+	qty: int
+
