@@ -8,6 +8,7 @@ import src.allocation.domain.events as events
 import src.allocation.service_layer.unit_of_work as unit_of_work
 import src.allocation.service_layer.messagebus as messagebus
 
+
 class FakeRepository(repository.AbstractRepository):
     def __init__(self, products):
         super().__init__()
@@ -37,6 +38,22 @@ class FakeUnitOfWork(unit_of_work.AbstractUnitOfWork):
 
     def rollback(self):
         pass
+
+
+# Optionally: Unit Testing Event Handlers in Isolation with a Fake Message Bus
+class FakeUnitOfWorkWithFakeMessageBus(FakeUnitOfWork):
+    def __init__(self):
+        super().__init__()
+        self.events_published = [] # type: list[events.Event]
+
+    # I send an empty list, because for these tests I don't care if the events
+    # are executed, only if the right ones are called with the right parameters.
+    def collect_new_events(self):
+        for product in self.products.seen:
+            while product.events:
+                self.events_published.append(product.events.pop(0))
+        return []
+
 
 
 class TestAddBatch:
@@ -149,6 +166,33 @@ class TestChangeBatchQuantity:
         assert batch1.available_quantity == 5
         # and 20 will be reallocated to the next batch
         assert batch2.available_quantity == 30
+
+
+# Optionally: Unit Testing Event Handlers in Isolation with a Fake Message Bus
+def test_reallocates_if_necessary_isolated():
+    uow = FakeUnitOfWorkWithFakeMessageBus()
+
+    # test setup as before
+    event_history = [
+        events.BatchCreated("batch1", "INDIFFERENT-TABLE", 50, None),
+        events.BatchCreated("batch2", "INDIFFERENT-TABLE", 50, date.today()),
+        events.AllocationRequired("order1", "INDIFFERENT-TABLE", 20),
+        events.AllocationRequired("order2", "INDIFFERENT-TABLE", 20),
+    ]
+    for e in event_history:
+        messagebus.handle(e, uow)
+    [batch1, batch2] = uow.products.get(sku="INDIFFERENT-TABLE").batches
+
+    assert batch1.available_quantity == 10
+    assert batch2.available_quantity == 50
+
+    messagebus.handle(events.BatchQuantityChanged("batch1", 25), uow)
+
+    # assert on new events emitted rather than downstream side-effects
+    [reallocation_event] = uow.events_published
+    assert isinstance(reallocation_event, events.AllocationRequired)
+    assert reallocation_event.orderid in {"order1", "order2"}
+    assert reallocation_event.sku == "INDIFFERENT-TABLE"
 
 
 # Why do we do this test? and using mock? and ussing unittest???
