@@ -82,6 +82,7 @@ def allocate(
         uow.commit()
         return batchref
 
+
 def change_batch_quantity(
     event: events.BatchQuantityChanged,
     uow: unit_of_work.AbstractUnitOfWork
@@ -90,6 +91,7 @@ def change_batch_quantity(
         product = uow.products.get_by_batchref(event.ref)
         if product is None:
             raise InvalidBatchref(f"Invalid batch reference {event.ref}")
+        # deallocated_lines = product.change_batch_quantity(ref=event.ref, qty=event.qty)
         product.change_batch_quantity(ref=event.ref, qty=event.qty)
         uow.commit()
 

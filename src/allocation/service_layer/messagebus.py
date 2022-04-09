@@ -34,9 +34,10 @@ def handle(
 
 
 HANDLERS = {
-	events.OutOfStock: [handlers.send_out_stock_notification],
 	events.BatchCreated: [handlers.add_batch],
-	events.AllocationRequired: [handlers.allocate]
+	events.BatchQuantityChanged: [handlers.change_batch_quantity],
+	events.AllocationRequired: [handlers.allocate],
+	events.OutOfStock: [handlers.send_out_stock_notification],
 } # type: Dict[Type[events.Event], List[Callable[[events.Event], None]]]
 
 # Note that the message bus as implemented doesn’t give us concurrency because only

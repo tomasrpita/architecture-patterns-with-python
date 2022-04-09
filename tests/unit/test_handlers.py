@@ -1,3 +1,4 @@
+from datetime import date
 import pytest
 from src.allocation.service_layer import handlers
 import src.allocation.adapters.repository as repository
@@ -17,6 +18,13 @@ class FakeRepository(repository.AbstractRepository):
 
     def _get(self, sku) -> model.Product:
         return next((p for p in self._products if p.sku == sku), None)
+
+    def _get_by_batchref(self, batchref: str) -> model.Product:
+        return next(
+            (p for p in self._products for b in p.batches if b.reference ==
+             batchref),
+             None
+        )
 
 
 class FakeUnitOfWork(unit_of_work.AbstractUnitOfWork):
@@ -141,7 +149,6 @@ class TestChangeBatchQuantity:
         assert batch1.available_quantity == 5
         # and 20 will be reallocated to the next batch
         assert batch2.available_quantity == 30
-
 
 
 # Why do we do this test? and using mock? and ussing unittest???

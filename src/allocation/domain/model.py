@@ -47,6 +47,12 @@ class Batch:
     def available_quantity(self) -> int:
         return self._purchased_quantity - self.allocated_quantity
 
+    @available_quantity.setter
+    def available_quantity(self, new_qty):
+        # Should there be a record of exchange of units purchased?
+        self._purchased_quantity = new_qty
+
+
     def allocate(self, line: OrderLine):
         if self.can_allocate(line):
             self._allocations.add(line)
@@ -58,6 +64,10 @@ class Batch:
     def can_allocate(self, line: OrderLine) -> bool:
         return self.available_quantity >= line.qty\
             and self.sku == line.sku
+
+    def deallocate_one(self) -> OrderLine:
+        return self._allocations.pop()
+
 
 
 # This is our Agregate Root.
@@ -80,5 +90,15 @@ class Product:
             # raise OutOfStock(f"Out of stock for sku {line.sku}")
             self.events.append(events.OutOfStock(line.sku))
             return None
+
+    def change_batch_quantity(self, ref: str, qty: int):
+        batch = next(b for b in self.batches if b.reference == ref)
+        batch.available_quantity = qty
+        while batch.available_quantity < 0:
+            line = batch.deallocate_one()
+            self.events.append(
+                events.AllocationRequired(line.orderid, line.sku, line.qty)
+            )
+
 
 
