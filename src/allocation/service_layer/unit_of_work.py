@@ -39,7 +39,7 @@ class AbstractUnitOfWork(abc.ABC):
 DEFAULT_SESSION_FACTORY = sessionmaker(
     bind=create_engine(
         config.get_postgres_uri(),
-        isolation_level="REPEATABLE READ", # <-- this is the key
+        isolation_level="REPEATABLE READ",  # <-- this is the key
     )
 )
 
@@ -51,7 +51,7 @@ class SqlAlchemyUnitOfWork(AbstractUnitOfWork):
         self.committed = False
 
     def __enter__(self):
-        self.session = self.session_factory() # type: Session
+        self.session = self.session_factory()  # type: Session
         self.products = repository.SqlAlchemyRepository(self.session)
         return super().__enter__()
 

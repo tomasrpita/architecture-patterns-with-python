@@ -2,11 +2,11 @@ import threading
 import time
 import traceback
 
-import src.allocation.domain.model as model
-import src.allocation.service_layer.unit_of_work as unit_of_work
 import pytest
 
-from  tests.random_refs import random_batchref, random_orderid, random_sku
+import src.allocation.domain.model as model
+import src.allocation.service_layer.unit_of_work as unit_of_work
+from tests.random_refs import random_batchref, random_orderid, random_sku
 
 
 def insert_batch(session, ref, sku, qty, eta, product_version=1):

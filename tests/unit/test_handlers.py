@@ -1,15 +1,14 @@
 from datetime import date
 from unittest import mock
+
 import pytest
 
 import src.allocation.adapters.repository as repository
 import src.allocation.domain.events as events
 import src.allocation.domain.model as model
-
-from src.allocation.service_layer import handlers
-
-import src.allocation.service_layer.unit_of_work as unit_of_work
 import src.allocation.service_layer.messagebus as messagebus
+import src.allocation.service_layer.unit_of_work as unit_of_work
+from src.allocation.service_layer import handlers
 
 
 class FakeRepository(repository.AbstractRepository):
@@ -25,9 +24,8 @@ class FakeRepository(repository.AbstractRepository):
 
     def _get_by_batchref(self, batchref: str) -> model.Product:
         return next(
-            (p for p in self._products for b in p.batches if b.reference ==
-             batchref),
-             None
+            (p for p in self._products for b in p.batches if b.reference == batchref),
+            None,
         )
 
 
@@ -50,7 +48,7 @@ class FakeUnitOfWork(unit_of_work.AbstractUnitOfWork):
 class FakeUnitOfWorkWithFakeMessageBus(FakeUnitOfWork):
     def __init__(self):
         super().__init__()
-        self.events_published = [] # type: list[events.Event]
+        self.events_published = []  # type: list[events.Event]
 
     # I send an empty list, because for these tests I don't care if the events
     # are executed, only if the right ones are called with the right parameters.
@@ -61,33 +59,24 @@ class FakeUnitOfWorkWithFakeMessageBus(FakeUnitOfWork):
         return []
 
 
-
 class TestAddBatch:
     def test_for_new_product(self):
         uow = FakeUnitOfWork()
 
-        messagebus.handle(
-            events.BatchCreated("b1", "CRUNCHY-ARMCHAIR", 100, None),
-            uow
-        )
+        messagebus.handle(events.BatchCreated("b1", "CRUNCHY-ARMCHAIR", 100, None), uow)
 
         assert uow.products.get("CRUNCHY-ARMCHAIR") is not None
         assert uow.committed
 
-
     def test_for_existing_product(self):
         uow = FakeUnitOfWork()
 
-        messagebus.handle(
-            events.BatchCreated("b1", "CRUNCHY-ARMCHAIR", 100, None),
-            uow
-        )
-        messagebus.handle(
-            events.BatchCreated("b2", "CRUNCHY-ARMCHAIR", 100, None),
-            uow
-        )
+        messagebus.handle(events.BatchCreated("b1", "CRUNCHY-ARMCHAIR", 100, None), uow)
+        messagebus.handle(events.BatchCreated("b2", "CRUNCHY-ARMCHAIR", 100, None), uow)
 
-        assert "b2" in [b.reference for b in uow.products.get("CRUNCHY-ARMCHAIR").batches]
+        assert "b2" in [
+            b.reference for b in uow.products.get("CRUNCHY-ARMCHAIR").batches
+        ]
 
 
 class TestAllocate:
@@ -95,46 +84,32 @@ class TestAllocate:
         uow = FakeUnitOfWork()
         # handlers.add_batch("batch1", "COMPLICATED-LAMP", 100, None, uow)
         messagebus.handle(
-            events.BatchCreated("batch1", "COMPLICATED-LAMP", 100, None),
-            uow
+            events.BatchCreated("batch1", "COMPLICATED-LAMP", 100, None), uow
         )
 
         # result = handlers.allocate("ord-1", "COMPLICATED-LAMP", 10, uow)
         results = messagebus.handle(
-            events.AllocationRequired("o1", "COMPLICATED-LAMP", 10),
-            uow
+            events.AllocationRequired("o1", "COMPLICATED-LAMP", 10), uow
         )
         assert "batch1" == results.pop(0)
-
 
     def test_allocate_errors_for_invalid_sku(self):
         uow = FakeUnitOfWork()
 
         messagebus.handle(
-            events.BatchCreated("batch-1", "sku-0", 100, "2011-01-01"),
-            uow
+            events.BatchCreated("batch-1", "sku-0", 100, "2011-01-01"), uow
         )
 
-        with pytest.raises(
-            handlers.InvalidSku, match="Invalid sku sku-1"
-        ):
-            messagebus.handle(
-                events.AllocationRequired("order-1", "sku-1", 10),
-                uow
-            )
-
+        with pytest.raises(handlers.InvalidSku, match="Invalid sku sku-1"):
+            messagebus.handle(events.AllocationRequired("order-1", "sku-1", 10), uow)
 
     def test_commits(self):
         uow = FakeUnitOfWork()
 
         messagebus.handle(
-            events.BatchCreated("batch-1", "sku-1", 100, "2011-01-01"),
-            uow
+            events.BatchCreated("batch-1", "sku-1", 100, "2011-01-01"), uow
         )
-        messagebus.handle(
-            events.AllocationRequired("order-1", 'sku-1', 10),
-            uow
-        )
+        messagebus.handle(events.AllocationRequired("order-1", "sku-1", 10), uow)
 
         assert uow.committed is True
 
@@ -178,14 +153,12 @@ class TestChangeBatchQuantity:
         uow = FakeUnitOfWork()
 
         messagebus.handle(
-            events.BatchCreated("batch-1", "POPULAR-CURTAINS", 9, "2011-01-01"),
-            uow
+            events.BatchCreated("batch-1", "POPULAR-CURTAINS", 9, "2011-01-01"), uow
         )
 
         with mock.patch("src.allocation.adapters.email.send") as mock_send_mail:
             messagebus.handle(
-                events.AllocationRequired("o1", "POPULAR-CURTAINS", 10),
-                uow
+                events.AllocationRequired("o1", "POPULAR-CURTAINS", 10), uow
             )
             assert mock_send_mail.call_args == mock.call(
                 "stock@made.com",

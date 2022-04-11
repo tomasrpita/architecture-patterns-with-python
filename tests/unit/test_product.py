@@ -1,10 +1,12 @@
 from datetime import date, timedelta
+
 import pytest
-from src.allocation.domain.model import OrderLine, Batch, Product
+
 import src.allocation.domain.events as events
+from src.allocation.domain.model import Batch, OrderLine, Product
 
 today = date.today()
-tomorrow = today = + timedelta(days=1)
+tomorrow = today = +timedelta(days=1)
 later = tomorrow + timedelta(days=10)
 
 
@@ -37,7 +39,7 @@ def test_prefers_earlier_batches():
 def test_returns_allocated_batch_ref():
     in_stock_batch = Batch("in-stock-batch-ref", "HIGHBROW-POSTER", 100, eta=None)
     shipment_batch = Batch("shipment-batch-ref", "HIGHBROW-POSTER", 100, eta=tomorrow)
-    product = Product(sku="HIGHBROW-POSTER",  batches=[in_stock_batch, shipment_batch])
+    product = Product(sku="HIGHBROW-POSTER", batches=[in_stock_batch, shipment_batch])
     line = OrderLine("order-ref", "HIGHBROW-POSTER", 10)
 
     allocation = product.allocate(line)

@@ -1,6 +1,7 @@
 from dataclasses import dataclass
-from typing import Optional, Set, List
 from datetime import date
+from typing import List, Optional, Set
+
 from . import events
 
 
@@ -18,8 +19,7 @@ class Batch:
         self.sku = sku
         self.eta = eta
         self._purchased_quantity = qty
-        self._allocations = set() # Set[OrderLine] <= Error, why?
-
+        self._allocations = set()  # Set[OrderLine] <= Error, why?
 
     def __eq__(self, other):
         if not isinstance(other, Batch):
@@ -29,7 +29,6 @@ class Batch:
     # An object is hashable if it has a hash value which never changes during its lifetime
     def __hash__(self):
         return hash(self.reference)
-
 
     # to use for sorting - sorted(List[Batch])
     def __gt__(self, other):
@@ -52,7 +51,6 @@ class Batch:
         # Should there be a record of exchange of units purchased?
         self._purchased_quantity = new_qty
 
-
     def allocate(self, line: OrderLine):
         if self.can_allocate(line):
             self._allocations.add(line)
@@ -62,8 +60,7 @@ class Batch:
             self._allocations.remove(line)
 
     def can_allocate(self, line: OrderLine) -> bool:
-        return self.available_quantity >= line.qty\
-            and self.sku == line.sku
+        return self.available_quantity >= line.qty and self.sku == line.sku
 
     def deallocate_one(self) -> OrderLine:
         return self._allocations.pop()
@@ -71,13 +68,11 @@ class Batch:
 
 # This is our Agregate Root.
 class Product:
-    def __init__(self, sku: str, batches: List[Batch],
-        version_number: int = 0
-    ):
+    def __init__(self, sku: str, batches: List[Batch], version_number: int = 0):
         self.sku = sku
         self.batches = batches
         self.version_number = version_number
-        self.events = [] # type: List[events.Event]
+        self.events = []  # type: List[events.Event]
 
     def allocate(self, line: OrderLine) -> str:
         try:
@@ -97,6 +92,3 @@ class Product:
             self.events.append(
                 events.AllocationRequired(line.orderid, line.sku, line.qty)
             )
-
-
-

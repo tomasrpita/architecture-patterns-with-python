@@ -1,42 +1,42 @@
 import abc
 from typing import Set
-import src.allocation.domain.model as model
+
 import src.allocation.adapters.orm as orm
+import src.allocation.domain.model as model
 
 
 # Aggregates are your entrypoints into the domain model
 class AbstractRepository(abc.ABC):
-        def __init__(self):
-            self.seen = set() # type: Set[model.Product]
+    def __init__(self):
+        self.seen = set()  # type: Set[model.Product]
 
+    def add(self, product: model.Product):
+        self._add(product)
+        self.seen.add(product)
 
-        def add(self, product: model.Product):
-            self._add(product)
+    def get(self, sku: str) -> model.Product:
+        product = self._get(sku)
+        if product:
             self.seen.add(product)
+        return product
 
-        def get(self, sku: str) -> model.Product:
-            product = self._get(sku)
-            if product:
-                self.seen.add(product)
-            return product
+    def get_by_batchref(self, batchref: str) -> model.Product:
+        product = self._get_by_batchref(batchref)
+        if product:
+            self.seen.add(product)
+        return product
 
-        def get_by_batchref(self, batchref: str) -> model.Product:
-            product = self._get_by_batchref(batchref)
-            if product:
-                self.seen.add(product)
-            return product
+    @abc.abstractmethod
+    def _get_by_batchref(self, batchref: str) -> model.Product:
+        raise NotImplementedError
 
-        @abc.abstractmethod
-        def _get_by_batchref(self, batchref: str) -> model.Product:
-            raise NotImplementedError
+    @abc.abstractmethod
+    def _add(self, product: model.Product):
+        raise NotImplementedError
 
-        @abc.abstractmethod
-        def _add(self, product: model.Product):
-            raise NotImplementedError
-
-        @abc.abstractmethod
-        def _get(self, sku: str) -> model.Product:
-            raise NotImplementedError
+    @abc.abstractmethod
+    def _get(self, sku: str) -> model.Product:
+        raise NotImplementedError
 
 
 class SqlAlchemyRepository(AbstractRepository):
@@ -57,4 +57,3 @@ class SqlAlchemyRepository(AbstractRepository):
             .filter(orm.batches.c.reference == batchref)
             .first()
         )
-

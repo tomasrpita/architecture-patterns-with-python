@@ -8,8 +8,8 @@ following a bunch of simple steps:
 """
 
 import src.allocation.adapters.email as email
-import src.allocation.domain.model as model
 import src.allocation.domain.events as events
+import src.allocation.domain.model as model
 import src.allocation.service_layer.unit_of_work as unit_of_work
 
 
@@ -22,9 +22,9 @@ class InvalidBatchref(Exception):
 
 
 def add_batch(
-        event: events.BatchCreated,
-        uow: unit_of_work.AbstractUnitOfWork,
-    ) -> None:
+    event: events.BatchCreated,
+    uow: unit_of_work.AbstractUnitOfWork,
+) -> None:
     with uow:
         product = uow.products.get(sku=event.sku)
         if product is None:
@@ -32,15 +32,15 @@ def add_batch(
             uow.products.add(product)
         product.batches.append(
             model.Batch(event.batchref, event.sku, event.qty, event.eta)
-            )
+        )
         uow.commit()
 
 
 def allocate(
-        event: events.AllocationRequired,
-        uow: unit_of_work.AbstractUnitOfWork,
-    ) -> str:
-    line = model.OrderLine(event.orderid, event.sku,event.qty)
+    event: events.AllocationRequired,
+    uow: unit_of_work.AbstractUnitOfWork,
+) -> str:
+    line = model.OrderLine(event.orderid, event.sku, event.qty)
     with uow:
         product = uow.products.get(sku=line.sku)
         if product is None:
@@ -51,9 +51,8 @@ def allocate(
 
 
 def change_batch_quantity(
-    event: events.BatchQuantityChanged,
-    uow: unit_of_work.AbstractUnitOfWork
-    ):
+    event: events.BatchQuantityChanged, uow: unit_of_work.AbstractUnitOfWork
+):
     with uow:
         product = uow.products.get_by_batchref(event.ref)
         if product is None:
@@ -64,10 +63,7 @@ def change_batch_quantity(
 
 # pylint: disable=unused-argument
 def send_out_stock_notification(
-        event: events.OutOfStock,
-        uow: unit_of_work.AbstractUnitOfWork,
-    ) -> None:
-   email.send(
-       "stock@made.com",
-       f"Out of stock for {event.sku}"
-   )
+    event: events.OutOfStock,
+    uow: unit_of_work.AbstractUnitOfWork,
+) -> None:
+    email.send("stock@made.com", f"Out of stock for {event.sku}")
