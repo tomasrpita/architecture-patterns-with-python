@@ -35,7 +35,6 @@ allocations = Table(
     Column("batch_id", ForeignKey("batches.id")),
 )
 
-
 products = Table(
 	"products",
 	metadata,

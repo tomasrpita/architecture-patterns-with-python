@@ -79,5 +79,6 @@ def restart_api():
     # What does this line do?
     # If I comment it out it still works the same
     # (Path(__file__).parent / "../entrypoints/flask_app.py").touch()
+    # (Path(__file__).parent / "../src/allocation/entrypoints/flask_app.py").touch()
     time.sleep(0.5)
     wait_for_webapp_to_come_up()

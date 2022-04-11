@@ -1,7 +1,11 @@
-# Tests
-pytest
-requests
-
-psycopg2-binary
+# App
 SQLAlchemy
 Flask
+psycopg2-binary
+
+
+# Tests
+pytest
+pytest-icdiff
+requests
+

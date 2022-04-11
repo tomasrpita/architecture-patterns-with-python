@@ -1,14 +1,8 @@
 from typing import List, Callable, Dict, Type
 from ..domain import events
-# from ..adapters import email
-# import handlers
-# import unit_of_work
 from . import handlers
 from . import unit_of_work
 
-
-# def handle(event: events.Event):
-# 	for handler in HANDLERS[type(event)]:
 
 def handle(
 	event: events.Event,
@@ -26,19 +20,12 @@ def handle(
 	return results
 
 
-# def send_out_stock_notification(event: events.OutOfStock):
-# 	email.send_mail(
-# 		"stock@made.com",
-# 		f"Out of stock for {event.sku}"
-# 	)
-
-
 HANDLERS = {
 	events.BatchCreated: [handlers.add_batch],
 	events.BatchQuantityChanged: [handlers.change_batch_quantity],
 	events.AllocationRequired: [handlers.allocate],
 	events.OutOfStock: [handlers.send_out_stock_notification],
-} # type: Dict[Type[events.Event], List[Callable[[events.Event], None]]]
+} #  type: Dict[Type[events.Event], List[Callable]]
 
 # Note that the message bus as implemented doesn’t give us concurrency because only
 # one handler will run at a time. Our objective isn’t to support parallel threads

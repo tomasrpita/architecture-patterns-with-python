@@ -18,16 +18,6 @@ class AbstractUnitOfWork(abc.ABC):
 
     def commit(self):
         self._commit()
-        # self.publish_events()
-
-    # def publish_events(self):
-    #     for product in self.products.seen:
-    #         # this could cause unexpected performance problems in your
-    #         # web endpoints (adding asynchronous processing is possible
-    #         # but makes things even more confusing).
-    #         while product.events:
-    #             event = product.events.pop(0)
-    #             messagebus.handle(event)
 
     def collect_new_events(self):
         for product in self.products.seen:
@@ -61,7 +51,7 @@ class SqlAlchemyUnitOfWork(AbstractUnitOfWork):
         self.committed = False
 
     def __enter__(self):
-        self.session = self.session_factory()
+        self.session = self.session_factory() # type: Session
         self.products = repository.SqlAlchemyRepository(self.session)
         return super().__enter__()
 
@@ -74,5 +64,4 @@ class SqlAlchemyUnitOfWork(AbstractUnitOfWork):
         self.committed = True
 
     def rollback(self):
-        if self.committed:
-            self.session.rollback()
+        self.session.rollback()

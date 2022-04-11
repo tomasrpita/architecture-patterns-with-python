@@ -51,12 +51,6 @@ class SqlAlchemyRepository(AbstractRepository):
         return self.session.query(model.Product).filter_by(sku=sku).one_or_none()
 
     def _get_by_batchref(self, batchref: str) -> model.Product:
-        # batch = self.session.query(model.Batch).filter_by(
-        #     reference=batchref
-        #     ).one_or_none()
-        # if not batch:
-        #     return None
-        # return self._get(batch.sku)
         return (
             self.session.query(model.Product)
             .join(model.Batch)

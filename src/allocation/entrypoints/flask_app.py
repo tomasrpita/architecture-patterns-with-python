@@ -15,12 +15,6 @@ app = Flask(__name__)
 @app.route("/allocate", methods=["POST"])
 def allocate_endpoint():
     try:
-        # batchref = handlers.allocate(
-        #     request.json["orderid"],
-        #     request.json["sku"],
-        #     request.json["qty"],
-        #     unit_of_work.SqlAlchemyUnitOfWork()
-        # )
         event = events.AllocationRequired(
             request.json["orderid"],
             request.json["sku"],
@@ -44,13 +38,6 @@ def add_batch_endpoint():
     if eta is not None:
         eta = datetime.fromisoformat(eta).date()
 
-    # handlers.add_batch(
-    #     request.json["batchref"],
-    #     request.json["sku"],
-    #     request.json["qty"],
-    #     eta,
-    #     unit_of_work.SqlAlchemyUnitOfWork()
-    # )
     event = events.BatchCreated(
         request.json["batchref"],
         request.json["sku"],

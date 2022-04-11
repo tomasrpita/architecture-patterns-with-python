@@ -69,7 +69,6 @@ class Batch:
         return self._allocations.pop()
 
 
-
 # This is our Agregate Root.
 class Product:
     def __init__(self, sku: str, batches: List[Batch],
@@ -87,7 +86,6 @@ class Product:
             self.version_number += 1
             return batch.reference
         except StopIteration:
-            # raise OutOfStock(f"Out of stock for sku {line.sku}")
             self.events.append(events.OutOfStock(line.sku))
             return None
 

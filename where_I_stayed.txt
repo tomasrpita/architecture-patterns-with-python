@@ -6,8 +6,3 @@ Part: Exercise for the Reader
 Define "FLASK_APP": "src/allocation/entrypoints/flask_app.py" to test
 
 To-do:
-	- Exercise for the Reader
-	- Make pass test_sends_email_on_out_of_stock_error
-	- Clean up the code
-
-

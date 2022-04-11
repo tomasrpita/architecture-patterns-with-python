@@ -1,10 +1,13 @@
 from datetime import date
+from unittest import mock
 import pytest
-from src.allocation.service_layer import handlers
+
 import src.allocation.adapters.repository as repository
-import src.allocation.domain.model as model
 import src.allocation.domain.events as events
-# import allocation.service_layer.handlers as handlers
+import src.allocation.domain.model as model
+
+from src.allocation.service_layer import handlers
+
 import src.allocation.service_layer.unit_of_work as unit_of_work
 import src.allocation.service_layer.messagebus as messagebus
 
@@ -41,6 +44,9 @@ class FakeUnitOfWork(unit_of_work.AbstractUnitOfWork):
 
 
 # Optionally: Unit Testing Event Handlers in Isolation with a Fake Message Bus
+# which is unnecessarily complicated and violates the SRP.
+# If we change the message bus to being a class,[3] then building
+# a FakeMessageBus is more straightforward:
 class FakeUnitOfWorkWithFakeMessageBus(FakeUnitOfWork):
     def __init__(self):
         super().__init__()
@@ -57,7 +63,7 @@ class FakeUnitOfWorkWithFakeMessageBus(FakeUnitOfWork):
 
 
 class TestAddBatch:
-    def test_add_for_new_product(self):
+    def test_for_new_product(self):
         uow = FakeUnitOfWork()
 
         messagebus.handle(
@@ -69,7 +75,7 @@ class TestAddBatch:
         assert uow.committed
 
 
-    def test_add_for_existing_product(self):
+    def test_for_existing_product(self):
         uow = FakeUnitOfWork()
 
         messagebus.handle(
@@ -167,6 +173,25 @@ class TestChangeBatchQuantity:
         # and 20 will be reallocated to the next batch
         assert batch2.available_quantity == 30
 
+    # @pytest.mark.skip(reason="Don't work")
+    def test_sends_email_on_out_of_stock_error(self):
+        uow = FakeUnitOfWork()
+
+        messagebus.handle(
+            events.BatchCreated("batch-1", "POPULAR-CURTAINS", 9, "2011-01-01"),
+            uow
+        )
+
+        with mock.patch("src.allocation.adapters.email.send") as mock_send_mail:
+            messagebus.handle(
+                events.AllocationRequired("o1", "POPULAR-CURTAINS", 10),
+                uow
+            )
+            assert mock_send_mail.call_args == mock.call(
+                "stock@made.com",
+                f"Out of stock for POPULAR-CURTAINS",
+            )
+
 
 # Optionally: Unit Testing Event Handlers in Isolation with a Fake Message Bus
 def test_reallocates_if_necessary_isolated():
@@ -193,26 +218,3 @@ def test_reallocates_if_necessary_isolated():
     assert isinstance(reallocation_event, events.AllocationRequired)
     assert reallocation_event.orderid in {"order1", "order2"}
     assert reallocation_event.sku == "INDIFFERENT-TABLE"
-
-
-# Why do we do this test? and using mock? and ussing unittest???
-# TODO: Make Work
-from unittest import mock
-@pytest.mark.skip(reason="Don't work")
-def test_sends_email_on_out_of_stock_error():
-    uow = FakeUnitOfWork()
-
-    messagebus.handle(
-        events.BatchCreated("batch-1", "POPULAR-CURTAINS", 9, "2011-01-01"),
-        uow
-    )
-
-    with mock.patch("src.allocation.adapters.email.send_mail") as mock_send_mail:
-        messagebus.handle(
-            events.AllocationRequired("o1", "POPULAR-CURTAINS", 10),
-            uow
-        )
-        assert mock_send_mail.call_args == mock.call(
-            "stock@made.com",
-            f"Out of stock for POPULAR-CURTAINS",
-        )

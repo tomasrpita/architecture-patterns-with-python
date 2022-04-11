@@ -47,4 +47,3 @@ def test_unhappy_path_returns_400_and_error_message():
 
     assert r.status_code == 400
     assert r.json()["message"] == f"Invalid sku {unknown_sku}"
-
