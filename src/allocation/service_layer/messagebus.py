@@ -1,20 +1,33 @@
-from typing import Callable, Dict, List, Type
+from typing import Callable, Dict, List, Type, Union
+
 
 from ..domain import events
+from ..domain import commands
 from . import handlers, unit_of_work
 
+Message = Union[commands.Command, events.Event]
 
-def handle(event: events.Event, uow: unit_of_work.AbstractUnitOfWork):
+
+def handle(message: Message, uow: unit_of_work.AbstractUnitOfWork):
     # A Temporary Ugly Hack: The Message Bus Has to Return Results
     results = []
-    queue = [event]
+    queue = [message]
     while queue:
-        event = queue.pop(0)
-        for handler in HANDLERS[type(event)]:
-            # handler(event, uow=uow)
-            results.append(handler(event, uow=uow))
-            queue.extend(uow.collect_new_events())
+        message = queue.pop(0)
+        if isinstance(message, events.Event):
+            handle_event(message, queue, uow)
+        elif isinstance(message, commands.Command):
+            cmd_result = handle_command(message, queue, uow)
+            results.append(cmd_result)
+        else:
+            raise Exception(f"{message} was not an Event or Commandº")
+
+        # for handler in HANDLERS[type(event)]:
+        #     # handler(event, uow=uow)
+        #     results.append(handler(event, uow=uow))
+        #     queue.extend(uow.collect_new_events())
     return results
+
 
 
 HANDLERS = {

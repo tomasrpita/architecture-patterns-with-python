@@ -1,7 +1,7 @@
 This is a note for whwre I stayed in the book
 
 Chapter 10: Commands and Command Handler
-Part: Starting
+Part: Differences in Exception Handling
 
 Define "FLASK_APP": "src/allocation/entrypoints/flask_app.py" to test
 
