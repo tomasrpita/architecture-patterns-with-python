@@ -1,8 +1,11 @@
 This is a note for whwre I stayed in the book
 
-Chapter 9: Going to Town on the Message Bus
-Part: Exercise for the Reader
+Chapter 10: Commands and Command Handler
+Part: Starting
 
 Define "FLASK_APP": "src/allocation/entrypoints/flask_app.py" to test
 
 To-do:
+
+
+
