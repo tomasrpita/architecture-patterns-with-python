@@ -1,3 +1,7 @@
+from asyncio.log import logger
+from email import message
+from multiprocessing import Event
+from tkinter import COMMAND
 from typing import Callable, Dict, List, Type, Union
 
 
@@ -29,13 +33,46 @@ def handle(message: Message, uow: unit_of_work.AbstractUnitOfWork):
     return results
 
 
+def handle_event(
+    event: events.Event,
+    queue: List[Message],
+    uow: unit_of_work.AbstractUnitOfWork
+):
+    for handler in EVENT_HANDLERS[type(event)]:
+        try:
+            logger.debug(f"Handlig event {event} whith the handler {handler}")
+            handler(event, uow=uow)
+            queue.extend(uow.collect_new_events())
+        except Exception:
+            logger.exception(f"Exception handling event {event}")
+            continue
 
-HANDLERS = {
-    events.BatchCreated: [handlers.add_batch],
-    events.BatchQuantityChanged: [handlers.change_batch_quantity],
-    events.AllocationRequired: [handlers.allocate],
+
+def handle_commad(
+    command: commands.Command,
+    queue: List[Message],
+    uow: unit_of_work.AbstractUnitOfWork
+):
+    logger.debug(f"Handlig command {command}")
+    try:
+        handler = COMMAND_HANDLERS[type[command]]
+        result = handler(command, uow=uow)
+        queue.extend(uow.collect_new_events())
+        return result
+    except Exception:
+        logger.exception(f"Exception handling command {command}")
+        raise
+
+
+EVENT_HANDLERS = {
     events.OutOfStock: [handlers.send_out_stock_notification],
 }  #  type: Dict[Type[events.Event], List[Callable]]
+
+COMMAND_HANDLERS = {
+    commands.Allocate: [handlers.allocate],
+    commands.CreateBatch: [handlers.add_batch],
+    commands.ChangeBatchQuantity: [handlers.change_batch_quantity],
+}  #  type: Dict[Type[commands.Command], List[Callable]]
 
 # Note that the message bus as implemented doesn’t give us concurrency because only
 # one handler will run at a time. Our objective isn’t to support parallel threads
