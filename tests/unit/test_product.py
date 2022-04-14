@@ -1,9 +1,10 @@
-from datetime import date, timedelta
+from datetime import date
+from datetime import timedelta
 
-import pytest
-
-import src.allocation.domain.events as events
-from src.allocation.domain.model import Batch, OrderLine, Product
+from src.allocation.domain import events
+from src.allocation.domain.model import Batch
+from src.allocation.domain.model import OrderLine
+from src.allocation.domain.model import Product
 
 today = date.today()
 tomorrow = today = +timedelta(days=1)

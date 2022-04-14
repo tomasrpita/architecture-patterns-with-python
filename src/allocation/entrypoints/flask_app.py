@@ -1,12 +1,13 @@
 from datetime import datetime
 
-from flask import Flask, request
+from flask import Flask
+from flask import request
 
-import src.allocation.adapters.orm as orm
-import src.allocation.service_layer.handlers as handlers
-import src.allocation.service_layer.unit_of_work as unit_of_work
-from src.allocation.domain import events
+from src.allocation.adapters import orm
+from src.allocation.domain import commands
+from src.allocation.service_layer import handlers
 from src.allocation.service_layer import messagebus
+from src.allocation.service_layer import unit_of_work
 
 orm.start_mappers()
 app = Flask(__name__)
@@ -15,7 +16,7 @@ app = Flask(__name__)
 @app.route("/allocate", methods=["POST"])
 def allocate_endpoint():
     try:
-        event = events.AllocationRequired(
+        event = commands.Allocate(
             request.json["orderid"],
             request.json["sku"],
             request.json["qty"],
@@ -36,7 +37,7 @@ def add_batch_endpoint():
     if eta is not None:
         eta = datetime.fromisoformat(eta).date()
 
-    event = events.BatchCreated(
+    event = commands.CreateBatch(
         request.json["batchref"],
         request.json["sku"],
         request.json["qty"],

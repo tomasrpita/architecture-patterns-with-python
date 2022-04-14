@@ -38,8 +38,12 @@ markupsafe==2.0.1
     # via jinja2
 mccabe==0.6.1
     # via flake8
+mypy==0.942
+    # via -r requirements.in
 mypy-extensions==0.4.3
-    # via black
+    # via
+    #   black
+    #   mypy
 packaging==21.2
     # via pytest
 pathspec==0.9.0
@@ -75,9 +79,13 @@ tenacity==8.0.1
 toml==0.10.2
     # via pytest
 tomli==1.2.3
-    # via black
+    # via
+    #   black
+    #   mypy
 typing-extensions==4.1.1
-    # via black
+    # via
+    #   black
+    #   mypy
 urllib3==1.26.8
     # via requests
 werkzeug==2.0.2

@@ -1,7 +1,15 @@
-from sqlalchemy import Column, Date, ForeignKey, Integer, MetaData, String, Table, event
-from sqlalchemy.orm import mapper, relationship
+from sqlalchemy import Column
+from sqlalchemy import Date
+from sqlalchemy import ForeignKey
+from sqlalchemy import Integer
+from sqlalchemy import MetaData
+from sqlalchemy import String
+from sqlalchemy import Table
+from sqlalchemy import event
+from sqlalchemy.orm import mapper
+from sqlalchemy.orm import relationship
 
-import src.allocation.domain.model as model
+from src.allocation.domain import model
 
 metadata = MetaData()
 

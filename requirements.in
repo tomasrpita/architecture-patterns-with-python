@@ -8,6 +8,7 @@ tenacity
 pytest
 pytest-icdiff
 requests
+mypy
 
 # Format and lifting
 black==21.12b0

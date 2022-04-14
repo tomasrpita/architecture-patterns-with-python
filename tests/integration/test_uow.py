@@ -4,9 +4,11 @@ import traceback
 
 import pytest
 
-import src.allocation.domain.model as model
-import src.allocation.service_layer.unit_of_work as unit_of_work
-from tests.random_refs import random_batchref, random_orderid, random_sku
+from src.allocation.domain import model
+from src.allocation.service_layer import unit_of_work
+from tests.random_refs import random_batchref
+from tests.random_refs import random_orderid
+from tests.random_refs import random_sku
 
 
 def insert_batch(session, ref, sku, qty, eta, product_version=1):

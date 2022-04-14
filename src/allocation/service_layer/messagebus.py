@@ -1,10 +1,21 @@
-from logging import log
-from typing import Callable, Dict, List, Type, Union
-from tenacity import Retrying, RetryError, atop_after_attempt, wait_exponential
+import logging
+from typing import Callable
+from typing import Dict
+from typing import List
+from typing import Type
+from typing import Union
 
-from ..domain import events
+from tenacity import RetryError
+from tenacity import Retrying
+from tenacity import stop_after_attempt
+from tenacity import wait_exponential
+
 from ..domain import commands
-from . import handlers, unit_of_work
+from ..domain import events
+from . import handlers
+from . import unit_of_work
+
+logger = logging.getLogger(__name__)
 
 Message = Union[commands.Command, events.Event]
 
@@ -22,33 +33,25 @@ def handle(message: Message, uow: unit_of_work.AbstractUnitOfWork):
             results.append(cmd_result)
         else:
             raise Exception(f"{message} was not an Event or Commandº")
-
-        # for handler in HANDLERS[type(event)]:
-        #     # handler(event, uow=uow)
-        #     results.append(handler(event, uow=uow))
-        #     queue.extend(uow.collect_new_events())
     return results
 
 
 def handle_event(
-    event: events.Event,
-    queue: List[Message],
-    uow: unit_of_work.AbstractUnitOfWork
+    event: events.Event, queue: List[Message], uow: unit_of_work.AbstractUnitOfWork
 ):
     for handler in EVENT_HANDLERS[type(event)]:
         try:
             for attempt in Retrying(
-                stop=atop_after_attempt(3),
-                wait=wait_exponential()
+                stop=stop_after_attempt(3), wait=wait_exponential()
             ):
                 with attempt:
-                    log.debug(f"Handlig event {event} whith the handler {handler}")
+                    logger.debug(f"Handlig event {event} whith the handler {handler}")
                     handler(event, uow=uow)
                     queue.extend(uow.collect_new_events())
         except RetryError as retry_failure:
-            log.error(
+            logger.error(
                 "Failed to handle event %s times, giving up!",
-                retry_failure.last_attempt.attempt_number
+                retry_failure.last_attempt.attempt_number,
             )
             continue
 
@@ -56,16 +59,16 @@ def handle_event(
 def handle_command(
     command: commands.Command,
     queue: List[Message],
-    uow: unit_of_work.AbstractUnitOfWork
+    uow: unit_of_work.AbstractUnitOfWork,
 ):
-    log.debug(f"Handlig command {command}")
+    logger.debug(f"Handlig command {command}")
     try:
-        handler = COMMAND_HANDLERS[type[command]]
+        handler = COMMAND_HANDLERS[type(command)]
         result = handler(command, uow=uow)
         queue.extend(uow.collect_new_events())
         return result
     except Exception:
-        log.exception(f"Exception handling command {command}")
+        logger.exception(f"Exception handling command {command}")
         raise
 
 
@@ -74,9 +77,9 @@ EVENT_HANDLERS = {
 }  #  type: Dict[Type[events.Event], List[Callable]]
 
 COMMAND_HANDLERS = {
-    commands.Allocate: [handlers.allocate],
-    commands.CreateBatch: [handlers.add_batch],
-    commands.ChangeBatchQuantity: [handlers.change_batch_quantity],
+    commands.Allocate: handlers.allocate,
+    commands.CreateBatch: handlers.add_batch,
+    commands.ChangeBatchQuantity: handlers.change_batch_quantity,
 }  #  type: Dict[Type[commands.Command], List[Callable]]
 
 # Note that the message bus as implemented doesn’t give us concurrency because only
