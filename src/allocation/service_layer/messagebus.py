@@ -1,9 +1,6 @@
-from asyncio.log import logger
-from email import message
-from multiprocessing import Event
-from tkinter import COMMAND
+from logging import log
 from typing import Callable, Dict, List, Type, Union
-
+from tenacity import Retrying, RetryError, atop_after_attempt, wait_exponential
 
 from ..domain import events
 from ..domain import commands
@@ -40,27 +37,35 @@ def handle_event(
 ):
     for handler in EVENT_HANDLERS[type(event)]:
         try:
-            logger.debug(f"Handlig event {event} whith the handler {handler}")
-            handler(event, uow=uow)
-            queue.extend(uow.collect_new_events())
-        except Exception:
-            logger.exception(f"Exception handling event {event}")
+            for attempt in Retrying(
+                stop=atop_after_attempt(3),
+                wait=wait_exponential()
+            ):
+                with attempt:
+                    log.debug(f"Handlig event {event} whith the handler {handler}")
+                    handler(event, uow=uow)
+                    queue.extend(uow.collect_new_events())
+        except RetryError as retry_failure:
+            log.error(
+                "Failed to handle event %s times, giving up!",
+                retry_failure.last_attempt.attempt_number
+            )
             continue
 
 
-def handle_commad(
+def handle_command(
     command: commands.Command,
     queue: List[Message],
     uow: unit_of_work.AbstractUnitOfWork
 ):
-    logger.debug(f"Handlig command {command}")
+    log.debug(f"Handlig command {command}")
     try:
         handler = COMMAND_HANDLERS[type[command]]
         result = handler(command, uow=uow)
         queue.extend(uow.collect_new_events())
         return result
     except Exception:
-        logger.exception(f"Exception handling command {command}")
+        log.exception(f"Exception handling command {command}")
         raise
 
 

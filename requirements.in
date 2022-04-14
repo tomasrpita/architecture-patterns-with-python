@@ -2,7 +2,7 @@
 SQLAlchemy
 Flask
 psycopg2-binary
-
+tenacity
 
 # Tests
 pytest

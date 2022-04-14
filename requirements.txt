@@ -70,6 +70,8 @@ requests==2.27.1
     # via -r requirements.in
 sqlalchemy==1.4.27
     # via -r requirements.in
+tenacity==8.0.1
+    # via -r requirements.in
 toml==0.10.2
     # via pytest
 tomli==1.2.3
