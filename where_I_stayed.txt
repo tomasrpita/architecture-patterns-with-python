@@ -1,7 +1,7 @@
 This is a note for whwre I stayed in the book
 
-Chapter 10: Commands and Command Handler
-Part: Finished
+Chapter 11: Event-Driven Architecture: Using Events to Integrate Microservices
+Part: Test-Driving It All Using an End-to-End Test
 
 Define "FLASK_APP": "src/allocation/entrypoints/flask_app.py" to test
 
