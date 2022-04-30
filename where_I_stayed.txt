@@ -1,8 +1,14 @@
 This is a note for whwre I stayed in the book
 
 Chapter 11: Event-Driven Architecture: Using Events to Integrate Microservices
-Part: Redis Create Simple Redis message listener
+Part: Finished
 
 Define "FLASK_APP": "src/allocation/entrypoints/flask_app.py" to test
 
 To-do:
+- read the chapter comments
+- check the author code
+- make the test pass
+	- make Redis implementation
+
+- make the exercise for the reader
