@@ -2,6 +2,7 @@
 SQLAlchemy
 Flask
 psycopg2-binary
+redis
 tenacity
 
 # Tests

@@ -4,6 +4,7 @@ from tests.random_refs import random_batchref
 from tests.random_refs import random_orderid
 from tests.random_refs import random_sku
 from tests import api_client
+import redis_client
 
 
 def test_change_batch_quantity_leading_to_realocation():
