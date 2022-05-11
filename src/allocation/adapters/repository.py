@@ -1,8 +1,8 @@
 import abc
 from typing import Set
 
-from src.allocation.adapters import orm
-from src.allocation.domain import model
+from allocation.adapters import orm
+from allocation.domain import model
 
 
 # Aggregates are your entrypoints into the domain model

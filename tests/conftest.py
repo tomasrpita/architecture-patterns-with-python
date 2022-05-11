@@ -9,9 +9,9 @@ from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import clear_mappers
 from sqlalchemy.orm import sessionmaker
 
-from src.allocation import config
-from src.allocation.adapters.orm import metadata
-from src.allocation.adapters.orm import start_mappers
+from allocation import config
+from allocation.adapters.orm import metadata
+from allocation.adapters.orm import start_mappers
 
 
 @pytest.fixture

@@ -4,12 +4,12 @@ from unittest import mock
 
 import pytest
 
-from src.allocation.adapters import repository
-from src.allocation.domain import commands
-from src.allocation.domain import model
-from src.allocation.service_layer import handlers
-from src.allocation.service_layer import messagebus
-from src.allocation.service_layer import unit_of_work
+from allocation.adapters import repository
+from allocation.domain import commands
+from allocation.domain import model
+from allocation.service_layer import handlers
+from allocation.service_layer import messagebus
+from allocation.service_layer import unit_of_work
 
 
 class FakeRepository(repository.AbstractRepository):
@@ -145,7 +145,7 @@ class TestChangeBatchQuantity:
             commands.CreateBatch("batch-1", "POPULAR-CURTAINS", 9, "2011-01-01"), uow
         )
 
-        with mock.patch("src.allocation.adapters.email.send") as mock_send_mail:
+        with mock.patch("allocation.adapters.email.send") as mock_send_mail:
             messagebus.handle(commands.Allocate("o1", "POPULAR-CURTAINS", 10), uow)
             assert mock_send_mail.call_args == mock.call(
                 "stock@made.com",

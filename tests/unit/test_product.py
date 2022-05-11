@@ -1,10 +1,10 @@
 from datetime import date
 from datetime import timedelta
 
-from src.allocation.domain import events
-from src.allocation.domain.model import Batch
-from src.allocation.domain.model import OrderLine
-from src.allocation.domain.model import Product
+from allocation.domain import events
+from allocation.domain.model import Batch
+from allocation.domain.model import OrderLine
+from allocation.domain.model import Product
 
 today = date.today()
 tomorrow = today = +timedelta(days=1)

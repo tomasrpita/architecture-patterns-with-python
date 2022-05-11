@@ -3,11 +3,11 @@ from datetime import datetime
 from flask import Flask
 from flask import request
 
-from src.allocation.adapters import orm
-from src.allocation.domain import commands
-from src.allocation.service_layer import handlers
-from src.allocation.service_layer import messagebus
-from src.allocation.service_layer import unit_of_work
+from allocation.adapters import orm
+from allocation.domain import commands
+from allocation.service_layer import handlers
+from allocation.service_layer import messagebus
+from allocation.service_layer import unit_of_work
 
 orm.start_mappers()
 app = Flask(__name__)

@@ -8,11 +8,11 @@ following a bunch of simple steps:
 """
 
 from allocation.adapters import redis_eventpublisher
-from src.allocation.adapters import email
-from src.allocation.domain import commands
-from src.allocation.domain import events
-from src.allocation.domain import model
-from src.allocation.service_layer import unit_of_work
+from allocation.adapters import email
+from allocation.domain import commands
+from allocation.domain import events
+from allocation.domain import model
+from allocation.service_layer import unit_of_work
 
 
 class InvalidSku(Exception):

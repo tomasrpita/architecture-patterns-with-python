@@ -3,10 +3,10 @@ import json
 import logging
 import redis
 
-# from src.allocation.domain import commands
-# from src.allocation.service_layer import unit_of_work, messagebus
-# from src.allocation import config
-# from src.allocation.adapters import orm
+# from allocation.domain import commands
+# from allocation.service_layer import unit_of_work, messagebus
+# from allocation import config
+# from allocation.adapters import orm
 
 from domain import commands
 from service_layer import unit_of_work, messagebus

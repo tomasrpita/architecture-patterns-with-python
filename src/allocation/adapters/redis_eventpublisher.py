@@ -2,8 +2,8 @@ import json
 import logging
 import redis
 from dataclasses import asdict
-from src.allocation import config
-from src.allocation.domain import events
+from allocation import config
+from allocation.domain import events
 
 logger = logging.getLogger(__name__)
 

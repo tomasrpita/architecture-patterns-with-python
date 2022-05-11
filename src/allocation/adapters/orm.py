@@ -9,7 +9,7 @@ from sqlalchemy import event
 from sqlalchemy.orm import mapper
 from sqlalchemy.orm import relationship
 
-from src.allocation.domain import model
+from allocation.domain import model
 
 metadata = MetaData()
 

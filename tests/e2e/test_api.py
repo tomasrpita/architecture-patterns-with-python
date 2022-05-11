@@ -1,7 +1,7 @@
 import pytest
 import requests
 
-from src.allocation import config
+from allocation import config
 from tests.random_refs import random_batchref
 from tests.random_refs import random_orderid
 from tests.random_refs import random_sku
