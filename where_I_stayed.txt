@@ -7,6 +7,5 @@ Define "FLASK_APP": "src/allocation/entrypoints/flask_app.py" to test
 
 To-do:
 - make the test pass
-	- make Redis implementation
-
+   - FAILED: /tests/e2e/test_external_events.py::test_change_batch_quantity_leading_to_realocation
 - make the exercise for the reader
