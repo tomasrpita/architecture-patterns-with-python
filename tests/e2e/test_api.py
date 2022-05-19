@@ -2,10 +2,10 @@ import pytest
 import requests
 
 from allocation import config
+from tests import api_client
 from tests.random_refs import random_batchref
 from tests.random_refs import random_orderid
 from tests.random_refs import random_sku
-from tests import api_client
 
 
 # Finally, we can confidently strip down our E2E tests to just two,

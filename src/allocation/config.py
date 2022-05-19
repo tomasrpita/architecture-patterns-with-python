@@ -1,6 +1,5 @@
 import os
 
-
 # def get_postgres_uri():
 #     host = os.environ.get("POSTGRES_HOST", "localhost")
 #     # port = 54321 if host == "localhost" else 5432
@@ -24,7 +23,6 @@ import os
 #     return dict(host=host, port=port)
 
 
-import os
 
 
 def get_postgres_uri():

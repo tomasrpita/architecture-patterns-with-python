@@ -7,8 +7,8 @@ following a bunch of simple steps:
     * Persist any changes
 """
 
-from allocation.adapters import redis_eventpublisher
 from allocation.adapters import email
+from allocation.adapters import redis_eventpublisher
 from allocation.domain import commands
 from allocation.domain import events
 from allocation.domain import model
@@ -69,6 +69,7 @@ def send_out_stock_notification(
     uow: unit_of_work.AbstractUnitOfWork,
 ) -> None:
     email.send("stock@made.com", f"Out of stock for {event.sku}")
+
 
 def publish_allocated_event(
     event: events.Allocated,

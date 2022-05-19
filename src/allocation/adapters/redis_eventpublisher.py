@@ -1,7 +1,9 @@
 import json
 import logging
-import redis
 from dataclasses import asdict
+
+import redis
+
 from allocation import config
 from allocation.domain import events
 
