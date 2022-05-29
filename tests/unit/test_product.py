@@ -48,14 +48,15 @@ def test_returns_allocated_batch_ref():
     assert allocation == in_stock_batch.reference
 
 
-def test_increments_version_number():
-    line = OrderLine("oref", "SCANDI-PEN", 10)
-    product = Product(
-        sku="SCANDI-PEN", batches=[Batch("b1", "SCANDI-PEN", 100, eta=None)]
-    )
-    product.version_number = 7
+def test_outputs_allocated_event():
+    batch = Batch("batchref", "RETRO-LAMPSHADE", 100, eta=None)
+    line = OrderLine("oref", "RETRO-LAMPSHADE", 10)
+    product = Product(sku="RETRO-LAMPSHADE", batches=[batch])
     product.allocate(line)
-    assert product.version_number == 8
+    expected = events.Allocated(
+        orderid="oref", sku="RETRO-LAMPSHADE", qty=10, batchref=batch.reference
+    )
+    assert product.events[-1] == expected
 
 
 def test_records_out_stock_event_if_cannot_allocate():
@@ -67,3 +68,13 @@ def test_records_out_stock_event_if_cannot_allocate():
 
     assert product.events[-1] == events.OutOfStock(sku="SMALL-FORK")
     assert allocation is None
+
+
+def test_increments_version_number():
+    line = OrderLine("oref", "SCANDI-PEN", 10)
+    product = Product(
+        sku="SCANDI-PEN", batches=[Batch("b1", "SCANDI-PEN", 100, eta=None)]
+    )
+    product.version_number = 7
+    product.allocate(line)
+    assert product.version_number == 8
