@@ -1,7 +1,7 @@
 This is a note for whwre I stayed in the book
 
-Chapter 11: Event-Driven Architecture: Using Events to Integrate Microservices
-Part: Finished
+Chapter 12: Command-Query Responsibility Segregation (CQRS)
+Part: Post/Redirect/Get and CQS
 
 Define "FLASK_APP": "src/allocation/entrypoints/flask_app.py" to test
 
