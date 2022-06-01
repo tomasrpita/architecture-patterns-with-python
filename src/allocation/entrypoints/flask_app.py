@@ -30,6 +30,15 @@ def allocate_endpoint():
     return {"batchref": batchref}, 201
 
 
+@app.route("/allocations/<orderid>", methods=["GET"])
+def get_allocations_view_endpoint(orderid):
+    uow = unit_of_work.SqlAlchemyUnitOfWork()
+    result = views.allocations(orderid, uow)
+    if not result:
+        return "Not found", 404
+    return result, 200
+
+
 @app.route("/batches", methods=["POST"])
 def add_batch_endpoint():
 
@@ -47,3 +56,5 @@ def add_batch_endpoint():
     messagebus.handle(cmd, unit_of_work.SqlAlchemyUnitOfWork())
 
     return {"message": "ok"}, 201
+
+
