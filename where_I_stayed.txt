@@ -1,7 +1,7 @@
 This is a note for whwre I stayed in the book
 
 Chapter 12: Command-Query Responsibility Segregation (CQRS)
-Part: "Obvious" Alternative 2: Using the ORM
+Part: Time to Completely Jump the Shark
 
 Define "FLASK_APP": "src/allocation/entrypoints/flask_app.py" to test
 
