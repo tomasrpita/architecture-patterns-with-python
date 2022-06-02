@@ -3,6 +3,7 @@ from datetime import datetime
 from flask import Flask
 from flask import request
 
+from allocation import views
 from allocation.adapters import orm
 from allocation.domain import commands
 from allocation.service_layer import handlers
