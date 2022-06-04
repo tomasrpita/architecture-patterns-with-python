@@ -4,7 +4,6 @@ from typing import List
 from typing import Optional
 from typing import Set
 
-from . import commands
 from . import events
 
 
@@ -92,15 +91,23 @@ class Product:
                     batchref=batch.reference,
                 )
             )
-
+            # is this necessary yet?
             return batch.reference
         except StopIteration:
             self.events.append(events.OutOfStock(line.sku))
             return None
 
+    # def change_batch_quantity(self, ref: str, qty: int):
+    #     batch = next(b for b in self.batches if b.reference == ref)
+    #     batch.available_quantity = qty
+    #     while batch.available_quantity < 0:
+    #         line = batch.deallocate_one()
+    #         # self.events.append(commands.Allocate(line.orderid, line.sku, line.qty))
+    #         self.events.append(events.Deallocated(line.orderid, line.sku, line.qty))
+
     def change_batch_quantity(self, ref: str, qty: int):
         batch = next(b for b in self.batches if b.reference == ref)
-        batch.available_quantity = qty
+        batch._purchased_quantity = qty
         while batch.available_quantity < 0:
             line = batch.deallocate_one()
-            self.events.append(commands.Allocate(line.orderid, line.sku, line.qty))
+            self.events.append(events.Deallocated(line.orderid, line.sku, line.qty))

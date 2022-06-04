@@ -21,19 +21,15 @@ Message = Union[commands.Command, events.Event]
 
 
 def handle(message: Message, uow: unit_of_work.AbstractUnitOfWork):
-    # A Temporary Ugly Hack: The Message Bus Has to Return Results
-    results = []
     queue = [message]
     while queue:
         message = queue.pop(0)
         if isinstance(message, events.Event):
             handle_event(message, queue, uow)
         elif isinstance(message, commands.Command):
-            cmd_result = handle_command(message, queue, uow)
-            results.append(cmd_result)
+            handle_command(message, queue, uow)
         else:
             raise Exception(f"{message} was not an Event or Commandº")
-    return results
 
 
 def handle_event(
@@ -64,9 +60,8 @@ def handle_command(
     logger.debug(f"Handlig command {command}")
     try:
         handler = COMMAND_HANDLERS[type(command)]
-        result = handler(command, uow=uow)
+        handler(command, uow=uow)
         queue.extend(uow.collect_new_events())
-        return result
     except Exception:
         logger.exception(f"Exception handling command {command}")
         raise
@@ -74,6 +69,7 @@ def handle_command(
 
 EVENT_HANDLERS = {
     events.Allocated: [handlers.publish_allocated_event],
+    events.Deallocated: [handlers.reallocate],
     events.OutOfStock: [handlers.send_out_stock_notification],
 }  #  type: Dict[Type[events.Event], List[Callable]]
 
