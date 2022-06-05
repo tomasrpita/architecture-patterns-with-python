@@ -82,7 +82,6 @@ def change_batch_quantity(
         uow.commit()
 
 
-
 # pylint: disable=unused-argument
 def send_out_stock_notification(
     event: events.OutOfStock,
