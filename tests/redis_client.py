@@ -1,5 +1,4 @@
 import json
-
 import redis
 
 from allocation import config

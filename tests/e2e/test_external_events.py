@@ -31,7 +31,7 @@ def test_change_batch_quantity_leading_to_realocation():
 		{"batchref": earlier_batch, "qty": 3}
 	)
 
-	# wait unitl we see a message saying the order has been realocated
+    # wait until we see a message saying the order has been reallocated
 	messages = []
 	for attempt in Retrying(stop=stop_after_delay(3), reraise=True):
 		with attempt:
