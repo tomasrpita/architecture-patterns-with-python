@@ -22,6 +22,13 @@ order_lines = Table(
     Column("orderid", String(255)),
 )
 
+products = Table(
+    "products",
+    metadata,
+    Column("sku", String(255), primary_key=True),
+    Column("version_number", Integer, nullable=False, server_default="0"),
+)
+
 batches = Table(
     "batches",
     metadata,
@@ -38,13 +45,6 @@ allocations = Table(
     Column("id", Integer, primary_key=True, autoincrement=True),
     Column("orderline_id", ForeignKey("order_lines.id")),
     Column("batch_id", ForeignKey("batches.id")),
-)
-
-products = Table(
-    "products",
-    metadata,
-    Column("sku", String(255), primary_key=True),
-    Column("version_number", Integer, nullable=False, server_default="0"),
 )
 
 

@@ -1,3 +1,4 @@
+from __future__ import annotations
 import abc
 
 from sqlalchemy import create_engine
@@ -10,7 +11,7 @@ from allocation.adapters import repository
 class AbstractUnitOfWork(abc.ABC):
     products: repository.AbstractRepository
 
-    def __enter__(self):
+    def __enter__(self)  -> AbstractUnitOfWork:
         return self
 
     def __exit__(self, *args):
