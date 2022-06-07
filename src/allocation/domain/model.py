@@ -1,3 +1,4 @@
+from __future__ import annotations
 from dataclasses import dataclass
 from datetime import date
 from typing import List
@@ -88,10 +89,11 @@ class Batch:
     def deallocate_one(self) -> OrderLine:
         return self._allocations.pop()
 
-    # TODO: Funtion only in test_batch, it is not used anywhere else
-    def deallocate(self, line: OrderLine):
-        if line in self._allocations:
-            self._allocations.remove(line)
+    # Funtion only in test_batch, it is not used anywhere else
+    # those tests were taken to as higher level
+    # def deallocate(self, line: OrderLine):
+    #     if line in self._allocations:
+    #         self._allocations.remove(line)
 
     @property
     def allocated_quantity(self) -> int:
