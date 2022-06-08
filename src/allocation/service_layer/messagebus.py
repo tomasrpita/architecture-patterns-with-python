@@ -29,7 +29,7 @@ def handle(message: Message, uow: unit_of_work.AbstractUnitOfWork):
         elif isinstance(message, commands.Command):
             handle_command(message, queue, uow)
         else:
-            raise Exception(f"{message} was not an Event or Commandº")
+            raise Exception(f"{message} was not an Event or Command")
 
 
 def handle_event(
@@ -73,17 +73,17 @@ EVENT_HANDLERS = {
         handlers.add_allocation_to_read_model,
     ],
     events.Deallocated: [
-        handlers.remove_allocation_to_read_model,
+        handlers.remove_allocation_from_read_model,
         handlers.reallocate,
     ],
-    events.OutOfStock: [handlers.send_out_stock_notification],
-}  #  type: Dict[Type[events.Event], List[Callable]]
+    events.OutOfStock: [handlers.send_out_of_stock_notification],
+}  # type: Dict[Type[events.Event], List[Callable]]
 
 COMMAND_HANDLERS = {
     commands.Allocate: handlers.allocate,
     commands.CreateBatch: handlers.add_batch,
     commands.ChangeBatchQuantity: handlers.change_batch_quantity,
-}  #  type: Dict[Type[commands.Command], Callable]
+}  # type: Dict[Type[commands.Command], Callable]
 
 # Note that the message bus as implemented doesn’t give us concurrency because only
 # one handler will run at a time. Our objective isn’t to support parallel threads

@@ -47,7 +47,7 @@ def allocate(
     with uow:
         product = uow.products.get(sku=line.sku)
         if product is None:
-            raise InvalidSku(f"Invalid sku {cmd.sku}")
+            raise InvalidSku(f"Invalid sku {line.sku}")
         product.allocate(line)
         uow.commit()
 
@@ -83,7 +83,7 @@ def change_batch_quantity(
 
 
 # pylint: disable=unused-argument
-def send_out_stock_notification(
+def send_out_of_stock_notification(
     event: events.OutOfStock,
     uow: unit_of_work.AbstractUnitOfWork,
 ) -> None:
@@ -92,14 +92,14 @@ def send_out_stock_notification(
 
 def publish_allocated_event(
     event: events.Allocated,
-    uow: unit_of_work,
+    uow: unit_of_work.AbstractUnitOfWork,
 ):
     redis_eventpublisher.publish("line_allocated", event)
 
 
 def add_allocation_to_read_model(
     event: events.Allocated,
-    uow: unit_of_work.AbstractUnitOfWork,
+    uow: unit_of_work.SqlAlchemyUnitOfWork,
 ):
     with uow:
         uow.session.execute(
@@ -112,16 +112,23 @@ def add_allocation_to_read_model(
         uow.commit()
 
 
-def remove_allocation_to_read_model(
+def remove_allocation_from_read_model(
     event: events.Deallocated,
-    uow: unit_of_work.AbstractUnitOfWork,
+    uow: unit_of_work.SqlAlchemyUnitOfWork,
 ):
     with uow:
         uow.session.execute(
             """
             DELETE FROM allocations_view
-            WHERE orderid = :orderid AND sku = :sku AND batchref = :batchref
+            WHERE orderid = :orderid AND sku = :sku
             """,
-            {"orderid": event.orderid, "sku": event.sku, "batchref": event.batchref},
+            dict(orderid=event.orderid, sku=event.sku),
         )
+        # uow.session.execute(
+        #     """
+        #     DELETE FROM allocations_view
+        #     WHERE orderid = :orderid AND sku = :sku AND batchref = :batchref
+        #     """,
+        #     {"orderid": event.orderid, "sku": event.sku, "batchref": event.batchref},
+        # )
         uow.commit()

@@ -15,8 +15,9 @@ def allocations(oderid: str, uow: unit_of_work.SqlAlchemyUnitOfWork) -> List[dic
 		# )
 		results = uow.session.execute(
 			"""
-			SELECT sku, batchref from allocations_view WHERE orderid = :orderid
+			SELECT sku, batchref FROM allocations_view WHERE orderid = :orderid
 			""",
 			{"orderid": oderid},
 		)
-	return [{"sku": sku, "batchref": batchref} for  sku, batchref in results]
+	return [dict(r) for r in results]
+	# return [{"sku": sku, "batchref": batchref} for  sku, batchref in results]

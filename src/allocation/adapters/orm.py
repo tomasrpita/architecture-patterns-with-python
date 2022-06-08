@@ -22,6 +22,13 @@ order_lines = Table(
     Column("orderid", String(255)),
 )
 
+products = Table(
+    "products",
+    metadata,
+    Column("sku", String(255), primary_key=True),
+    Column("version_number", Integer, nullable=False, server_default="0"),
+)
+
 batches = Table(
     "batches",
     metadata,
@@ -40,12 +47,6 @@ allocations = Table(
     Column("batch_id", ForeignKey("batches.id")),
 )
 
-products = Table(
-    "products",
-    metadata,
-    Column("sku", String(255), primary_key=True),
-    Column("version_number", Integer, nullable=False, server_default="0"),
-)
 
 allocations_view = Table(
     "allocations_view",
@@ -72,7 +73,9 @@ def start_mappers():
         },
     )
     mapper(
-        model.Product, products, properties={"batches": relationship(batches_mapper)}
+        model.Product,
+        products,
+        properties={"batches": relationship(batches_mapper)}
     )
 
 

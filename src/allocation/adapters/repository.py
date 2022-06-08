@@ -47,13 +47,16 @@ class SqlAlchemyRepository(AbstractRepository):
     def _add(self, product: model.Product):
         self.session.add(product)
 
-    def _get(self, sku) -> model.Product:
-        return self.session.query(model.Product).filter_by(sku=sku).one_or_none()
+    def _get(self, sku: str) -> model.Product:
+        # return self.session.query(model.Product).filter_by(sku=sku).one_or_none()
+        return self.session.query(model.Product).filter_by(sku=sku).first()
 
     def _get_by_batchref(self, batchref: str) -> model.Product:
         return (
             self.session.query(model.Product)
             .join(model.Batch)
-            .filter(orm.batches.c.reference == batchref)
+            .filter(
+                orm.batches.c.reference == batchref
+            )
             .first()
         )

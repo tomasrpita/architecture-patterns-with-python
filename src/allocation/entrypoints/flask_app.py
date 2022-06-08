@@ -15,41 +15,6 @@ app = Flask(__name__)
 orm.start_mappers()
 
 
-@app.route("/allocate", methods=["POST"])
-def allocate_endpoint():
-    try:
-        cmd = commands.Allocate(
-            request.json["orderid"],
-            request.json["sku"],
-            request.json["qty"],
-        )
-
-        uow = unit_of_work.SqlAlchemyUnitOfWork()
-        messagebus.handle(cmd, uow)
-
-    except (handlers.InvalidSku) as e:
-        return {"message": str(e)}, 400
-
-    return {"message": "OK"}, 202
-
-
-# @app.route("/allocations/<orderid>", methods=["GET"])
-# def get_allocations_view_endpoint(orderid):
-#     uow = unit_of_work.SqlAlchemyUnitOfWork()
-#     result = views.allocations(orderid, uow)
-#     if not result:
-#         return "Not found", 404
-#     return result, 200
-
-@app.route("/allocations/<orderid>", methods=["GET"])
-def allocations_view_endpoint(orderid):
-    uow = unit_of_work.SqlAlchemyUnitOfWork()
-    result = views.allocations(orderid, uow)
-    if not result:
-        return "not found", 404
-    return jsonify(result), 200
-
-
 @app.route("/batches", methods=["POST"])
 def add_batch_endpoint():
 
@@ -65,7 +30,30 @@ def add_batch_endpoint():
     )
     uow = unit_of_work.SqlAlchemyUnitOfWork()
     messagebus.handle(cmd, uow)
+    return  "OK", 201
 
-    return {"message": "OK"}, 201
+@app.route("/allocate", methods=["POST"])
+def allocate_endpoint():
+    try:
+        cmd = commands.Allocate(
+            request.json["orderid"],
+            request.json["sku"],
+            request.json["qty"],
+        )
+
+        uow = unit_of_work.SqlAlchemyUnitOfWork()
+        messagebus.handle(cmd, uow)
+
+    except (handlers.InvalidSku) as e:
+        return {"message": str(e)}, 400
+
+    return "OK", 202
 
 
+@app.route("/allocations/<orderid>", methods=["GET"])
+def allocations_view_endpoint(orderid):
+    uow = unit_of_work.SqlAlchemyUnitOfWork()
+    result = views.allocations(orderid, uow)
+    if not result:
+        return "not found", 404
+    return jsonify(result), 200

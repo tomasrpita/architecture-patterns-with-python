@@ -6,11 +6,6 @@ class Event:
 
 
 @dataclass
-class OutOfStock(Event):
-    sku: str
-
-
-@dataclass
 class Allocated(Event):
     orderid: str
     sku: str
@@ -23,3 +18,8 @@ class Deallocated(Event):
     orderid: str
     sku: str
     qty: int
+
+
+@dataclass
+class OutOfStock(Event):
+    sku: str
