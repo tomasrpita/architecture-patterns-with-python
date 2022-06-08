@@ -1,9 +1,10 @@
 This is a note for whwre I stayed in the book
 
 Chapter 12: Command-Query Responsibility Segregation (CQRS)
-Part: Updating a Read Model Table Using an Event Handler
+Part: Rebuilding from Scratch
 
 Define "FLASK_APP": "src/allocation/entrypoints/flask_app.py" to test
 
 To-do:
+- make pass test_change_batch_quantity_leading_to_realocation
 - make the exercise for the reader

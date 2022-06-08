@@ -83,7 +83,7 @@ COMMAND_HANDLERS = {
     commands.Allocate: handlers.allocate,
     commands.CreateBatch: handlers.add_batch,
     commands.ChangeBatchQuantity: handlers.change_batch_quantity,
-}  #  type: Dict[Type[commands.Command], List[Callable]]
+}  #  type: Dict[Type[commands.Command], Callable]
 
 # Note that the message bus as implemented doesn’t give us concurrency because only
 # one handler will run at a time. Our objective isn’t to support parallel threads

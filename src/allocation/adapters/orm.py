@@ -50,7 +50,7 @@ products = Table(
 allocations_view = Table(
     "allocations_view",
     metadata,
-    Column("orderid", String(255))
+    Column("orderid", String(255)),
     Column("sku", String(255)),
     Column("batchref", String(255))
 )
