@@ -105,9 +105,9 @@ class Batch:
         self._purchased_quantity = new_qty
 
 
-    # def deallocate(self, line: OrderLine):
-    #     if line in self._allocations:
-    #         self._allocations.remove(line)
+    def deallocate(self, line: OrderLine):
+        if line in self._allocations:
+            self._allocations.remove(line)
 
 
 
