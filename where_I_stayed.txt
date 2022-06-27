@@ -1,10 +1,9 @@
 This is a note for whwre I stayed in the book
 
-Chapter 12: Command-Query Responsibility Segregation (CQRS)
-Part: Rebuilding from Scratch
+Chapter 13: Dependency Injection (and Bootstrapping)
+Part:
 
-Define "FLASK_APP": "src/allocation/entrypoints/flask_app.py" to test
+
 
 To-do:
-- make pass test_change_batch_quantity_leading_to_realocation
-- make the exercise for the reader
+
