@@ -42,7 +42,7 @@ def add_batch(
 def allocate(
     cmd: commands.Allocate,
     uow: unit_of_work.AbstractUnitOfWork,
-) -> str:
+):
     line = model.OrderLine(cmd.orderid, cmd.sku, cmd.qty)
     with uow:
         product = uow.products.get(sku=line.sku)

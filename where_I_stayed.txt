@@ -1,7 +1,7 @@
 This is a note for whwre I stayed in the book
 
 Chapter 13: Dependency Injection (and Bootstrapping)
-Part: Aren’t Explicit Dependencies Totally Weird and Java-y?
+Part: A Bootstrap Script
 
 
 
