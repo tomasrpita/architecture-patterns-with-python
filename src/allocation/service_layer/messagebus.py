@@ -20,6 +20,14 @@ logger = logging.getLogger(__name__)
 Message = Union[commands.Command, events.Event]
 
 
+class MessageBus():
+    def __init__(self, uow, event_handlers, command_handlers):
+        self.uow = uow
+        self.event_handlers = event_handlers
+        self.command_handlers = command_handlers
+
+
+
 def handle(message: Message, uow: unit_of_work.AbstractUnitOfWork):
     queue = [message]
     while queue:
