@@ -1,7 +1,7 @@
 This is a note for whwre I stayed in the book
 
 Chapter 13: Dependency Injection (and Bootstrapping)
-Part: A Bootstrap Script
+Part: Even-More-Manual DI with Less Magic
 
 
 

@@ -10,12 +10,15 @@ from service_layer import messagebus
 
 
 def inject_dependencies(handler, dependencies):
+	# An ordered mapping of parameters’ names to the corresponding Parameter objects.
+	# Parameters appear in strict definition order, including keyword-only parameters.
 	params = inspect.signature(handler).parameters
 	deps = {
 		name: dependency for name, dependency in dependencies.itmes() if name in params
 	}
-
+	# message is the partially initialized function
 	return lambda message: handler(message, **deps)
+
 
 def bootstrap(
 	start_orm: bool = True,

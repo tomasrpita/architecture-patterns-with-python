@@ -8,6 +8,7 @@ following a bunch of simple steps:
 """
 
 from dataclasses import asdict
+from typing import Callable
 from allocation.adapters import email
 from allocation.adapters import redis_eventpublisher
 from allocation.domain import commands
@@ -83,18 +84,19 @@ def change_batch_quantity(
 
 
 # pylint: disable=unused-argument
+#
 def send_out_of_stock_notification(
     event: events.OutOfStock,
-    uow: unit_of_work.AbstractUnitOfWork,
+    send_mail: Callable,
 ) -> None:
-    email.send("stock@made.com", f"Out of stock for {event.sku}")
+    send_mail("stock@made.com", f"Out of stock for {event.sku}")
 
 
 def publish_allocated_event(
     event: events.Allocated,
-    uow: unit_of_work.AbstractUnitOfWork,
+    publish: Callable,
 ):
-    redis_eventpublisher.publish("line_allocated", event)
+    publish("line_allocated", event)
 
 
 def add_allocation_to_read_model(
