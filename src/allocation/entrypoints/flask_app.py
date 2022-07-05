@@ -9,10 +9,12 @@ from allocation.adapters import orm
 from allocation.service_layer import messagebus
 from allocation.service_layer import unit_of_work
 from allocation.service_layer import handlers
-from allocation import views
+from allocation import bootstrap, views
 
 app = Flask(__name__)
-orm.start_mappers()
+# orm.start_mappers()
+
+bus = bootstrap.bootstrap()
 
 
 @app.route("/batches", methods=["POST"])
@@ -28,8 +30,8 @@ def add_batch_endpoint():
         request.json["qty"],
         eta,
     )
-    uow = unit_of_work.SqlAlchemyUnitOfWork()
-    messagebus.handle(cmd, uow)
+    # uow = unit_of_work.SqlAlchemyUnitOfWork()
+    bus.handle(cmd)
     return  "OK", 201
 
 @app.route("/allocate", methods=["POST"])
@@ -41,8 +43,9 @@ def allocate_endpoint():
             request.json["qty"],
         )
 
-        uow = unit_of_work.SqlAlchemyUnitOfWork()
-        messagebus.handle(cmd, uow)
+        # uow = unit_of_work.SqlAlchemyUnitOfWork()
+        # messagebus.handle(cmd, uow)
+        bus.handle(cmd)
 
     except (handlers.InvalidSku) as e:
         return {"message": str(e)}, 400
@@ -52,8 +55,9 @@ def allocate_endpoint():
 
 @app.route("/allocations/<orderid>", methods=["GET"])
 def allocations_view_endpoint(orderid):
-    uow = unit_of_work.SqlAlchemyUnitOfWork()
-    result = views.allocations(orderid, uow)
+    # uow = unit_of_work.SqlAlchemyUnitOfWork()
+    # result = views.allocations(orderid, uow)
+    result = views.allocations(orderid, bus.uow)
     if not result:
         return "not found", 404
     return jsonify(result), 200

@@ -1,9 +1,7 @@
 This is a note for whwre I stayed in the book
 
 Chapter 13: Dependency Injection (and Bootstrapping)
-Part: Message Bus Is Given Handlers at Runtime
-
-
+Part: Using Bootstrap in Our Entrypoints
 
 To-do:
-
+	adds Bootstrap to redis_eventconsumer ntrypoint
