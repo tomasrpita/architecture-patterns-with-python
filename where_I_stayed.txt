@@ -4,4 +4,4 @@ Chapter 13: Dependency Injection (and Bootstrapping)
 Part: Using Bootstrap in Our Entrypoints
 
 To-do:
-	adds Bootstrap to redis_eventconsumer ntrypoint
+
