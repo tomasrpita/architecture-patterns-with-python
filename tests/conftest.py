@@ -1,3 +1,4 @@
+
 import shutil
 import subprocess
 import time
@@ -11,13 +12,14 @@ from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import clear_mappers
 from sqlalchemy.orm import sessionmaker
+from allocation.service_layer import unit_of_work
 from tenacity import retry
 from tenacity import stop_after_delay
 
 from allocation import config
 from allocation.adapters.orm import metadata
 from allocation.adapters.orm import start_mappers
-
+from allocation import bootstrap
 
 @pytest.fixture
 def in_memory_db():
@@ -37,6 +39,16 @@ def sqlite_session_factory(in_memory_db):
 def sqlite_session(sqlite_session_factory):
     return sqlite_session_factory()
 
+@pytest.fixture
+def sqlite_bus(sqlite_session_factory):
+    bus = bootstrap.bootstrap(
+        start_orm=True,
+        uow=unit_of_work.SqlAlchemyUnitOfWork(sqlite_session_factory),
+        send_mail=lambda *args: None,
+        publsh=lambda *args: None,
+    )
+    yield bus
+    clear_mappers()
 
 # def wait_for_postgres_to_come_up(engine):
 #     deadline = time.time() + 10

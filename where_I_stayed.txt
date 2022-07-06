@@ -1,7 +1,7 @@
 This is a note for whwre I stayed in the book
 
 Chapter 13: Dependency Injection (and Bootstrapping)
-Part: Using Bootstrap in Our Entrypoints
+Part: Initializing DI in Our Tests
 
-To-do:
+To-do: to apply the bootstrap_test_app to rest_handlers.py
 

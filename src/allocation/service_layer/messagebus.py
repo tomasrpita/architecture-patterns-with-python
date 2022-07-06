@@ -37,6 +37,9 @@ class MessageBus():
         self.command_handlers = command_handlers
 
     def handle(self, message: Message):
+        # Using self.queue like this is not thread-safe, which might be a problem i
+        # f you’re using threads, because the bus instance is global in the Flask app
+        # context as we’ve written it. Just something to watch out for.
         self.queue = [message]
 
         while self.queue:
