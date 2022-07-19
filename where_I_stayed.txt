@@ -1,7 +1,8 @@
 This is a note for whwre I stayed in the book
 
-Chapter 13: Dependency Injection (and Bootstrapping)
+Chapter 13: Building an Adapter "Properly": A Worked Example
 Part: Initializing DI in Our Tests
 
-To-do: to apply the bootstrap_test_app to rest_handlers.py
+To-do:
+	Exercise for the Reader 1
 

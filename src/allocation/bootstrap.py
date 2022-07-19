@@ -7,6 +7,7 @@ from allocation.adapters import email, redis_eventpublisher, orm
 from typing import Callable
 from allocation.service_layer import unit_of_work
 from service_layer import messagebus
+from adapters.notifications import AbstractNotifications, EmailNotifications
 
 
 def inject_dependencies(handler, dependencies):
@@ -23,15 +24,16 @@ def inject_dependencies(handler, dependencies):
 def bootstrap(
 	start_orm: bool = True,
 	uow: unit_of_work.AbstractUnitOfWork = unit_of_work.SqlAlchemyUnitOfWork(),
-	send_mail: Callable = email.send,
+	# send_mail: Callable = email.send,
+	notifications: AbstractNotifications = EmailNotifications,
 	publsh: Callable = redis_eventpublisher.publish
 
-) -> messagebus:
+) -> messagebus.MessageBus:
 
 	if start_orm:
 		orm.start_mappers()
 
-	dependencies = {"uow": uow, "send_mail": send_mail, "publish": publsh}
+	dependencies = {"uow": uow, "send_mail": notifications, "publish": publsh}
 
 	injected_event_handlers = {
 		event_type: [

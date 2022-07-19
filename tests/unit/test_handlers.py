@@ -1,15 +1,19 @@
 # pylint: disable=no-self-use
+from __future__ import annotations
 from datetime import date
 from unittest import mock
+from collections import defaultdict
+from typing import Dict, List
 
 import pytest
 
 from allocation.adapters import repository
+from allocation.adapters import notifications
 from allocation import bootstrap
 from allocation.domain import commands
 from allocation.domain import model
 from allocation.service_layer import handlers
-from allocation.service_layer import bus.from allocation.service_layer import unit_of_work
+from allocation.service_layer import unit_of_work
 
 
 class FakeRepository(repository.AbstractRepository):
@@ -39,6 +43,12 @@ class FakeUnitOfWork(unit_of_work.AbstractUnitOfWork):
 
 	def rollback(self):
 		pass
+
+
+class FakeNotifications(notifications.AbstractNotifications):
+	def __init__(self) -> None:
+		self.sent = defaultdict(list) # type: Dict[str, List[str]]
+
 
 def bootstrap_test_app():
 	return bootstrap.bootstrap(
