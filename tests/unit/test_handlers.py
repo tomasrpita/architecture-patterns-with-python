@@ -49,12 +49,17 @@ class FakeNotifications(notifications.AbstractNotifications):
 	def __init__(self) -> None:
 		self.sent = defaultdict(list) # type: Dict[str, List[str]]
 
+	def send(self, destination, message):
+		self.sent[destination].append(message)
+
 
 def bootstrap_test_app():
 	return bootstrap.bootstrap(
 		start_orm=False,
 		uow=FakeUnitOfWork(),
-		send_mail=lambda *atgs: None,
+		# send_mail=lambda *atgs: None,
+		# notifications=FakeNotifications(), # Realmente este don lo utiliso no interesa
+		notifications=lambda *atgs: None,
 		publish=lambda *atgs: None
 	)
 
@@ -117,18 +122,29 @@ class TestAllocate:
 
 	# @pytest.mark.skip(reason="Don't work")
 	def test_sends_email_on_out_of_stock_error(self):
-		bus = bootstrap_test_app()
+
+		fake_notifs = FakeNotifications()
+		bus = bootstrap.bootstrap(
+			start_orm=False,
+			uow=FakeUnitOfWork(),
+			notifications=fake_notifs,
+			publsh=lambda *args: None
+		)
+
+		# bus = bootstrap_test_app()
 
 		bus.handle(
 			commands.CreateBatch("batch-1", "POPULAR-CURTAINS", 9, "2011-01-01")
 		)
 
-		with mock.patch("allocation.adapters.email.send") as mock_send_mail:
-			bus.handle(commands.Allocate("o1", "POPULAR-CURTAINS", 10))
-			assert mock_send_mail.call_args == mock.call(
-				"stock@made.com",
-				f"Out of stock for POPULAR-CURTAINS",
-			)
+		# with mock.patch("allocation.adapters.email.send") as mock_send_mail:
+		# 	bus.handle(commands.Allocate("o1", "POPULAR-CURTAINS", 10))
+		# 	assert mock_send_mail.call_args == mock.call(
+		# 		"stock@made.com",
+		# 		f"Out of stock for POPULAR-CURTAINS",
+		# 	)
+		bus.handle(commands.Allocate("o1", "POPULAR-CURTAINS", 10))
+		assert fake_notifs.sent["stock@made.com"] == [f"Out of stock for POPULAR-CURTAINS"]
 
 
 class TestChangeBatchQuantity:

@@ -1,8 +1,9 @@
 This is a note for whwre I stayed in the book
 
 Chapter 13: Building an Adapter "Properly": A Worked Example
-Part: Initializing DI in Our Tests
+Part: Figure Out How to Integration Test the Real Thing
 
 To-do:
+	finsh test_email.py
 	Exercise for the Reader 1
 
