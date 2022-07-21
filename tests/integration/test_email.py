@@ -2,8 +2,10 @@ import pytest
 import requests
 from allocation.adapters import notifications
 from allocation.service_layer import unit_of_work
+from allocation.domain import commands
 from src.allocation import bootstrap, config
 from sqlalchemy.orm import clear_mappers
+from tests import random_sku
 
 
 @pytest.fixture
@@ -28,4 +30,15 @@ def get_email_from_mailhog(sku):
 		).json()
 	return next(m for m in all_emails["items"] if sku in str(m))
 
+
+def test_out_of_stock_email(bus):
+	sku = random_sku()
+	bus.handle(commands.CreateBatch("batch1", sku, 9, None))
+	bus.handle(commands.Allocate("order1", sku, 10))
+
+	email = get_email_from_mailhog(sku)
+
+	assert email["Raw"]["From"] == "allocations@example.com"
+	assert email["Raw"]["To"] == "stock@made.com"
+	assert f"Out of stock for {sku}" in email["Raw"]["Data"]
 

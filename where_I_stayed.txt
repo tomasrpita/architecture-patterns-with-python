@@ -1,9 +1,10 @@
 This is a note for whwre I stayed in the book
 
 Chapter 13: Building an Adapter "Properly": A Worked Example
-Part: Figure Out How to Integration Test the Real Thing
+Part: DI and Bootstrap Recap
 
 To-do:
-	finsh test_email.py
+	check our code against the author github repo
+	check the other readers coments
 	Exercise for the Reader 1
-
+	Exercise for the Reader 2
