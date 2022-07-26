@@ -2,7 +2,7 @@ import uuid
 
 
 def random_suffix():
-    return str(uuid.uuid4())[:6]
+    return uuid.uuid4().hex[:6]
 
 
 def random_sku(name=""):

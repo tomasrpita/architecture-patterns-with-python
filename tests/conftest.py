@@ -1,4 +1,4 @@
-
+# pylint: disable=redefined-outer-name
 import shutil
 import subprocess
 import time
@@ -7,18 +7,18 @@ from pathlib import Path
 import pytest
 import redis
 import requests
-from requests.exceptions import ConnectionError
+# from requests.exceptions import ConnectionError
 from sqlalchemy import create_engine
-from sqlalchemy.exc import OperationalError
+# from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import clear_mappers
 from sqlalchemy.orm import sessionmaker
-from allocation.service_layer import unit_of_work
 from tenacity import retry
 from tenacity import stop_after_delay
 
 from allocation import config
 from allocation.adapters.orm import metadata
 from allocation.adapters.orm import start_mappers
+from allocation.service_layer import unit_of_work
 from allocation import bootstrap
 
 @pytest.fixture
@@ -85,7 +85,9 @@ def wait_for_redis_to_come_up():
 
 @pytest.fixture(scope="session")
 def postgres_db():
-    engine = create_engine(config.get_postgres_uri())
+    # engine = create_engine(config.get_postgres_uri())
+    # isolation_level="SERIALIZABLE" ???
+    engine = create_engine(config.get_postgres_uri(), isolation_level="SERIALIZABLE")
     wait_for_postgres_to_come_up(engine)
     metadata.create_all(engine)
     return engine
