@@ -5,7 +5,7 @@ Part: DI and Bootstrap Recap
 
 To-do:
 	check our code against the author github repo
-		-- comparing architecture-patterns-with-python\tests\conftest.py
+		-- comparing cosmicpython\tests\e2e\test_api.py
 	check the other readers coments
 	Exercise for the Reader 1
 	Exercise for the Reader 2

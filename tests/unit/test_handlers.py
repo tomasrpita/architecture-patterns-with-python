@@ -47,7 +47,7 @@ class FakeUnitOfWork(unit_of_work.AbstractUnitOfWork):
 
 class FakeNotifications(notifications.AbstractNotifications):
 	def __init__(self) -> None:
-		self.sent = defaultdict(list) # type: Dict[str, List[str]]
+		self.sent = defaultdict(list)  # type: Dict[str, List[str]]
 
 	def send(self, destination, message):
 		self.sent[destination].append(message)
@@ -100,15 +100,15 @@ class TestAllocate:
 		[batch] = bus.uow.products.get("COMPLICATED-LAMP").batches
 		assert batch.available_quantity == 90
 
-	def test_allocate_errors_for_invalid_sku(self):
+	def test_errors_for_invalid_sku(self):
 		bus = bootstrap_test_app()
 
 		bus.handle(
 			commands.CreateBatch("batch-1", "sku-0", 100, "2011-01-01")
 		)
 
-		with pytest.raises(handlers.InvalidSku, match="Invalid sku sku-1"):
-			bus.handle(commands.Allocate("order-1", "sku-1", 10))
+		with pytest.raises(handlers.InvalidSku, match="Invalid sku NONEXISTENTSKU"):
+			bus.handle(commands.Allocate("order-1", "NONEXISTENTSKU", 10))
 
 	def test_commits(self):
 		bus = bootstrap_test_app()
@@ -122,7 +122,7 @@ class TestAllocate:
 
 	# @pytest.mark.skip(reason="Don't work")
 	def test_sends_email_on_out_of_stock_error(self):
-
+		# TODO:Agrega el fake al de arriba y pruye el test
 		fake_notifs = FakeNotifications()
 		bus = bootstrap.bootstrap(
 			start_orm=False,
@@ -144,7 +144,9 @@ class TestAllocate:
 		# 		f"Out of stock for POPULAR-CURTAINS",
 		# 	)
 		bus.handle(commands.Allocate("o1", "POPULAR-CURTAINS", 10))
-		assert fake_notifs.sent["stock@made.com"] == [f"Out of stock for POPULAR-CURTAINS"]
+		assert fake_notifs.sent["stock@made.com"] == [
+			f"Out of stock for POPULAR-CURTAINS",
+		]
 
 
 class TestChangeBatchQuantity:

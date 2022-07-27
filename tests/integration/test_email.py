@@ -30,7 +30,7 @@ def get_email_from_mailhog(sku):
 		).json()
 	return next(m for m in all_emails["items"] if sku in str(m))
 
-
+# TODO: you have a sqlite_bus fixture that you can use here
 def test_out_of_stock_email(bus):
 	sku = random_sku()
 	bus.handle(commands.CreateBatch("batch1", sku, 9, None))

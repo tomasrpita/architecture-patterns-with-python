@@ -3,8 +3,10 @@ import shutil
 import subprocess
 import time
 from pathlib import Path
+from unittest import mock
 
 import pytest
+
 import redis
 import requests
 # from requests.exceptions import ConnectionError
@@ -44,7 +46,7 @@ def sqlite_bus(sqlite_session_factory):
     bus = bootstrap.bootstrap(
         start_orm=True,
         uow=unit_of_work.SqlAlchemyUnitOfWork(sqlite_session_factory),
-        send_mail=lambda *args: None,
+        notifications=mock.Mock(),
         publsh=lambda *args: None,
     )
     yield bus
@@ -86,7 +88,7 @@ def wait_for_redis_to_come_up():
 @pytest.fixture(scope="session")
 def postgres_db():
     # engine = create_engine(config.get_postgres_uri())
-    # isolation_level="SERIALIZABLE" ???
+    # isolation_level="SERIALIZABLE" ??? TODO: before was wth normal configuration!!!!!
     engine = create_engine(config.get_postgres_uri(), isolation_level="SERIALIZABLE")
     wait_for_postgres_to_come_up(engine)
     metadata.create_all(engine)

@@ -1,11 +1,9 @@
 import pytest
-import requests
 
-from allocation import config
-from tests import api_client
 from tests.random_refs import random_batchref
 from tests.random_refs import random_orderid
 from tests.random_refs import random_sku
+from tests import api_client
 
 
 # Finally, we can confidently strip down our E2E tests to just two,
@@ -49,6 +47,10 @@ def test_happy_path_returns_202_and_batch_is_allocated():
     r = api_client.get_allocation(orderid)
     assert r.ok
     assert r.json()[0] == {"sku": sku, "batchref": earlybatch}
+    # Which is the same as:
+    # assert r.json() == [
+    #     {"sku": sku, "batchref": earlybatch},
+    # ]
 
 
 # @pytest.mark.usefixtures("postgres_db")
@@ -69,7 +71,7 @@ def test_happy_path_returns_202_and_batch_is_allocated():
 def test_unhappy_path_returns_400_and_error_message():
     unknown_sku, orderid = random_sku(), random_orderid()
 
-    r = api_client.post_to_allocate(orderid, unknown_sku, qty=20, expect_succes=False)
+    r = api_client.post_to_allocate(orderid, unknown_sku, qty=20, expect_success=False)
     assert r.status_code == 400
     assert r.json()["message"] == f"Invalid sku {unknown_sku}"
 
