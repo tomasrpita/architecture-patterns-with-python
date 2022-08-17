@@ -5,14 +5,10 @@ from flask import request
 from flask import jsonify
 
 from allocation.domain import commands
-from allocation.adapters import orm
-from allocation.service_layer import messagebus
-from allocation.service_layer import unit_of_work
 from allocation.service_layer import handlers
 from allocation import bootstrap, views
 
 app = Flask(__name__)
-# orm.start_mappers()
 
 bus = bootstrap.bootstrap()
 
@@ -32,7 +28,8 @@ def add_batch_endpoint():
     )
     # uow = unit_of_work.SqlAlchemyUnitOfWork()
     bus.handle(cmd)
-    return  "OK", 201
+    return "OK", 201
+
 
 @app.route("/allocate", methods=["POST"])
 def allocate_endpoint():

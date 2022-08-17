@@ -36,13 +36,13 @@ class Product:
             self.events.append(events.OutOfStock(line.sku))
             return None
 
-
     def change_batch_quantity(self, ref: str, qty: int):
         batch = next(b for b in self.batches if b.reference == ref)
         batch._purchased_quantity = qty
         while batch.available_quantity < 0:
             line = batch.deallocate_one()
             self.events.append(events.Deallocated(line.orderid, line.sku, line.qty))
+
 
 # @dataclass(frozen=True)
 @dataclass(unsafe_hash=True)
@@ -58,7 +58,7 @@ class Batch:
         self.sku = sku
         self.eta = eta
         self._purchased_quantity = qty
-        self._allocations = set()  # Set[OrderLine] <= Error, why?
+        self._allocations = set()  # type: Set[OrderLine]
 
     def __repr__(self):
         return f"<Batch {self.reference}>"
@@ -95,7 +95,6 @@ class Batch:
     def available_quantity(self) -> int:
         return self._purchased_quantity - self.allocated_quantity
 
-
     def can_allocate(self, line: OrderLine) -> bool:
         return self.sku == line.sku and self.available_quantity >= line.qty
 
@@ -103,14 +102,3 @@ class Batch:
     def available_quantity(self, new_qty):
         # Should there be a record of exchange of units purchased?
         self._purchased_quantity = new_qty
-
-
-    # def deallocate(self, line: OrderLine):
-    #     if line in self._allocations:
-    #         self._allocations.remove(line)
-
-
-
-
-
-

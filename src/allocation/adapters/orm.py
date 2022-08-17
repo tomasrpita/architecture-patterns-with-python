@@ -1,16 +1,20 @@
-from sqlalchemy import Column
-from sqlalchemy import Date
-from sqlalchemy import ForeignKey
-from sqlalchemy import Integer
-from sqlalchemy import MetaData
-from sqlalchemy import String
-from sqlalchemy import Table
-from sqlalchemy import event
-from sqlalchemy.orm import mapper
-from sqlalchemy.orm import relationship
+from asyncio.log import logger
+import logging
+from sqlalchemy import (
+    Table,
+    MetaData,
+    Column,
+    Integer,
+    String,
+    Date,
+    ForeignKey,
+    event,
+)
+from sqlalchemy.orm import mapper, relationship
 
 from allocation.domain import model
 
+logger = logging.getLogger(__name__)
 metadata = MetaData()
 
 order_lines = Table(
@@ -53,13 +57,14 @@ allocations_view = Table(
     metadata,
     Column("orderid", String(255)),
     Column("sku", String(255)),
-    Column("batchref", String(255))
+    Column("batchref", String(255)),
 )
 
 
 def start_mappers():
     # When we call the mapper function, SQLAlchemy does its magic to bind
     # our domain model classes to the various tables we’ve defined.
+    logger.info("Starting mappers")
     lines_mapper = mapper(model.OrderLine, order_lines)
     batches_mapper = mapper(
         model.Batch,
@@ -73,9 +78,7 @@ def start_mappers():
         },
     )
     mapper(
-        model.Product,
-        products,
-        properties={"batches": relationship(batches_mapper)}
+        model.Product, products, properties={"batches": relationship(batches_mapper)}
     )
 
 

@@ -55,8 +55,6 @@ class SqlAlchemyRepository(AbstractRepository):
         return (
             self.session.query(model.Product)
             .join(model.Batch)
-            .filter(
-                orm.batches.c.reference == batchref
-            )
+            .filter(orm.batches.c.reference == batchref)
             .first()
         )
