@@ -9,8 +9,10 @@ import pytest
 
 import redis
 import requests
+
 # from requests.exceptions import ConnectionError
 from sqlalchemy import create_engine
+
 # from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import clear_mappers
 from sqlalchemy.orm import sessionmaker
@@ -23,6 +25,7 @@ from allocation.adapters.orm import start_mappers
 from allocation.service_layer import unit_of_work
 from allocation import bootstrap
 
+
 @pytest.fixture
 def in_memory_db():
     engine = create_engine("sqlite:///:memory:")
@@ -32,8 +35,15 @@ def in_memory_db():
 
 @pytest.fixture
 def sqlite_session_factory(in_memory_db):
-    start_mappers()
+    # start_mappers()
     yield sessionmaker(bind=in_memory_db)
+    # clear_mappers()
+
+
+@pytest.fixture
+def mappers():
+    start_mappers()
+    yield
     clear_mappers()
 
 
@@ -41,16 +51,18 @@ def sqlite_session_factory(in_memory_db):
 def sqlite_session(sqlite_session_factory):
     return sqlite_session_factory()
 
+
 @pytest.fixture
 def sqlite_bus(sqlite_session_factory):
     bus = bootstrap.bootstrap(
         start_orm=True,
         uow=unit_of_work.SqlAlchemyUnitOfWork(sqlite_session_factory),
         notifications=mock.Mock(),
-        publsh=lambda *args: None,
+        publish=lambda *args: None,
     )
     yield bus
     clear_mappers()
+
 
 # def wait_for_postgres_to_come_up(engine):
 #     deadline = time.time() + 10
@@ -62,7 +74,7 @@ def sqlite_bus(sqlite_session_factory):
 #     pytest.fail("Postgres never came up")
 @retry(stop=stop_after_delay(10))
 def wait_for_postgres_to_come_up(engine):
-        return engine.connect()
+    return engine.connect()
 
 
 # def wait_for_webapp_to_come_up():
@@ -76,7 +88,7 @@ def wait_for_postgres_to_come_up(engine):
 #     pytest.fail("API never came up")
 @retry(stop=stop_after_delay(10))
 def wait_for_webapp_to_come_up():
-        return requests.get(config.get_api_url())
+    return requests.get(config.get_api_url())
 
 
 @retry(stop=stop_after_delay(10))

@@ -4,6 +4,8 @@ Chapter 13: Building an Adapter "Properly": A Worked Example
 Part: DI and Bootstrap Recap
 
 To-do:
+	fix the bug in test:
+		test_uow_can_retrieve_a_batch_and_allocate_to_it
 	check the other readers coments
 	fix the import with isort
 	Exercise for the Reader 1

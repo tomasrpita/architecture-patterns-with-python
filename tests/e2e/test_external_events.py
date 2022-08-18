@@ -4,8 +4,8 @@ import pytest
 from tenacity import Retrying
 from tenacity import stop_after_delay
 
-from tests import api_client
-from tests import redis_client
+import api_client
+import redis_client
 from tests.random_refs import random_batchref
 from tests.random_refs import random_orderid
 from tests.random_refs import random_sku

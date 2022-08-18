@@ -5,7 +5,7 @@ import inspect
 from typing import Callable
 from allocation.adapters import redis_eventpublisher, orm
 from allocation.service_layer import handlers, unit_of_work, messagebus
-from adapters.notifications import AbstractNotifications, EmailNotifications
+from allocation.adapters.notifications import AbstractNotifications, EmailNotifications
 
 
 def inject_dependencies(handler, dependencies):
@@ -13,7 +13,7 @@ def inject_dependencies(handler, dependencies):
     # Parameters appear in strict definition order, including keyword-only parameters.
     params = inspect.signature(handler).parameters
     deps = {
-        name: dependency for name, dependency in dependencies.itmes() if name in params
+        name: dependency for name, dependency in dependencies.items() if name in params
     }
     # message is the partially initialized function
     return lambda message: handler(message, **deps)
@@ -23,13 +23,13 @@ def bootstrap(
     start_orm: bool = True,
     uow: unit_of_work.AbstractUnitOfWork = unit_of_work.SqlAlchemyUnitOfWork(),
     notifications: AbstractNotifications = EmailNotifications(),
-    publsh: Callable = redis_eventpublisher.publish,
+    publish: Callable = redis_eventpublisher.publish,
 ) -> messagebus.MessageBus:
 
     if start_orm:
         orm.start_mappers()
 
-    dependencies = {"uow": uow, "notifications": notifications, "publish": publsh}
+    dependencies = {"uow": uow, "notifications": notifications, "publish": publish}
 
     injected_event_handlers = {
         event_type: [
