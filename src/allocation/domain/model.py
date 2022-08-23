@@ -1,11 +1,11 @@
 from __future__ import annotations
+
 from dataclasses import dataclass
 from datetime import date
-from typing import List
-from typing import Optional
-from typing import Set
+from typing import List, Optional, Set
 
 from . import events
+
 
 # This is our Agregate Root.
 class Product:

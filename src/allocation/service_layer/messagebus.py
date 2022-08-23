@@ -1,15 +1,10 @@
 from __future__ import annotations
-import logging
-from typing import Callable
-from typing import Dict
-from typing import List
-from typing import Type
-from typing import Union
 
-from ..domain import commands
-from ..domain import events
-from . import handlers
-from . import unit_of_work
+import logging
+from typing import Callable, Dict, List, Type, Union
+
+from ..domain import commands, events
+from . import handlers, unit_of_work
 
 logger = logging.getLogger(__name__)
 

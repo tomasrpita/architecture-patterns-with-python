@@ -1,7 +1,8 @@
 from datetime import date
-from allocation.service_layer import messagebus, unit_of_work
-from allocation.domain import commands
+
 from allocation import views
+from allocation.domain import commands
+from allocation.service_layer import messagebus, unit_of_work
 
 today = date.today()
 

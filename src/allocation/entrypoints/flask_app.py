@@ -1,12 +1,10 @@
 from datetime import datetime
 
-from flask import Flask
-from flask import request
-from flask import jsonify
+from flask import Flask, jsonify, request
 
+from allocation import bootstrap, views
 from allocation.domain import commands
 from allocation.service_layer import handlers
-from allocation import bootstrap, views
 
 app = Flask(__name__)
 

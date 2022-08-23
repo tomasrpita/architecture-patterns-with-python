@@ -1,5 +1,7 @@
 from typing import List
+
 from allocation.service_layer import unit_of_work
+
 
 def allocations(oderid: str, uow: unit_of_work.SqlAlchemyUnitOfWork) -> List[dict]:
 	with uow:

@@ -1,9 +1,7 @@
+import api_client
 import pytest
 
-from tests.random_refs import random_batchref
-from tests.random_refs import random_orderid
-from tests.random_refs import random_sku
-import api_client
+from tests.random_refs import random_batchref, random_orderid, random_sku
 
 
 @pytest.mark.usefixtures("postgres_db")

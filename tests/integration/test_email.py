@@ -1,10 +1,11 @@
 import pytest
 import requests
-from allocation.adapters import notifications
-from allocation.service_layer import unit_of_work
-from allocation.domain import commands
-from src.allocation import bootstrap, config
 from sqlalchemy.orm import clear_mappers
+
+from allocation.adapters import notifications
+from allocation.domain import commands
+from allocation.service_layer import unit_of_work
+from src.allocation import bootstrap, config
 from tests.random_refs import random_sku
 
 

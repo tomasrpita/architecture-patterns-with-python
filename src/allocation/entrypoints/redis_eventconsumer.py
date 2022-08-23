@@ -3,9 +3,8 @@ import logging
 
 import redis
 
-from allocation import config
+from allocation import bootstrap, config
 from allocation.domain import commands
-from allocation import bootstrap
 
 logger = logging.getLogger(__name__)
 

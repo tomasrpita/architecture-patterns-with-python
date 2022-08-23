@@ -1,11 +1,12 @@
 from __future__ import annotations
-import inspect
 
+import inspect
 # from allocation.service_layer import handlers
 from typing import Callable
-from allocation.adapters import redis_eventpublisher, orm
-from allocation.service_layer import handlers, unit_of_work, messagebus
+
+from allocation.adapters import orm, redis_eventpublisher
 from allocation.adapters.notifications import AbstractNotifications, EmailNotifications
+from allocation.service_layer import handlers, messagebus, unit_of_work
 
 
 def inject_dependencies(handler, dependencies):

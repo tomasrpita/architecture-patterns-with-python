@@ -1,15 +1,7 @@
-from asyncio.log import logger
 import logging
-from sqlalchemy import (
-    Table,
-    MetaData,
-    Column,
-    Integer,
-    String,
-    Date,
-    ForeignKey,
-    event,
-)
+from asyncio.log import logger
+
+from sqlalchemy import Column, Date, ForeignKey, Integer, MetaData, String, Table, event
 from sqlalchemy.orm import mapper, relationship
 
 from allocation.domain import model

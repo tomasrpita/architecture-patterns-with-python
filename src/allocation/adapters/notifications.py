@@ -1,7 +1,7 @@
 import abc
 import smtplib
-from allocation import config
 
+from allocation import config
 
 DEFAULT_HOST = config.get_email_host_and_port()["host"]
 DEFAULT_PORT = config.get_email_host_and_port()["port"]

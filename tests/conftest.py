@@ -6,24 +6,17 @@ from pathlib import Path
 from unittest import mock
 
 import pytest
-
 import redis
 import requests
-
 # from requests.exceptions import ConnectionError
 from sqlalchemy import create_engine
-
 # from sqlalchemy.exc import OperationalError
-from sqlalchemy.orm import clear_mappers
-from sqlalchemy.orm import sessionmaker
-from tenacity import retry
-from tenacity import stop_after_delay
+from sqlalchemy.orm import clear_mappers, sessionmaker
+from tenacity import retry, stop_after_delay
 
-from allocation import config
-from allocation.adapters.orm import metadata
-from allocation.adapters.orm import start_mappers
+from allocation import bootstrap, config
+from allocation.adapters.orm import metadata, start_mappers
 from allocation.service_layer import unit_of_work
-from allocation import bootstrap
 
 
 @pytest.fixture

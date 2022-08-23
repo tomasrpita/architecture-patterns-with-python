@@ -1,8 +1,6 @@
-from datetime import date
-from datetime import timedelta
+from datetime import date, timedelta
 
-from allocation.domain.model import Batch
-from allocation.domain.model import OrderLine
+from allocation.domain.model import Batch, OrderLine
 
 today = date.today()
 tomorrow = today = +timedelta(days=1)

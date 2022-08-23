@@ -1,12 +1,13 @@
 from __future__ import annotations
+
 from dataclasses import asdict
-from typing import TYPE_CHECKING, Callable, List, Dict, Type
-from allocation.domain import commands
-from allocation.domain import events
-from allocation.domain import model
+from typing import TYPE_CHECKING, Callable, Dict, List, Type
+
+from allocation.domain import commands, events, model
 
 if TYPE_CHECKING:
     from allocation.adapters import notifications
+
     from . import unit_of_work
 
 
