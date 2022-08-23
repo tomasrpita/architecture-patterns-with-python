@@ -7,6 +7,5 @@ To-do:
 	fix the bug in test:
 		test_uow_can_retrieve_a_batch_and_allocate_to_it
 	check the other readers coments
-	fix the import with isort
 	Exercise for the Reader 1
 	Exercise for the Reader 2
